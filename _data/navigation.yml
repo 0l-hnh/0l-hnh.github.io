@@ -1,7 +1,31 @@
 # main links
 main:
-  - title: "Quick-Start Guide"
-    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
+  - title: "Home"
+    url: /index.html
+  - title: "About"
+    url: /portfolio/
+
+docs:
+- title: "Works"
+  children:
+    - title: "ASR"
+      url: /asr/
+      category: "asr"
+    - title: "Python"
+      url: /python/
+      category: "python"
+    - title: "OS"
+      url: /os/
+      category: "os"
+- title: "Etc"
+  children:
+    - title: "Devlog"
+      url: /devlog/
+      category: "devlog"
+
+#=============================sample================================
+  #- title: "Quick-Start Guide"
+  #  url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
