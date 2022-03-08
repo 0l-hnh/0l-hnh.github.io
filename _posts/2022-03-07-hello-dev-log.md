@@ -5,7 +5,7 @@ date:   2022-03-08 00:41:35 +0900
 
 categories:
   - devlog
-tags: [blog, devlog]
+tags: [devlog]
 
 author_profile: true
 sidebar:
