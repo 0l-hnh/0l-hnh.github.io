@@ -14,4 +14,4 @@
 
 * #신호처리 #음성인식 #AI #주니어개발자
 * OS : Windows / Linux (Redhat, Ubuntu)
-* 주 사용 언어 : Python, Pytorch
+* 주 사용 언어 : Python, C++
