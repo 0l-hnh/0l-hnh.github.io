@@ -16,7 +16,7 @@ minimal_mistakes_skin    : "contrast" # "air", "aqua", "contrast", "dark", "dirt
 
 # Site Settings
 locale                   : "en-US"
-title                    : "0l.hnh.l0-DevLog"
+title                    : "0l-hnh's DevLog"
 title_separator          : "-"
 subtitle                 : "version 0.1" # site tagline that appears below site title in masthead
 name                     : "0l.hnh"
@@ -27,7 +27,7 @@ repository               : "https://github.com/0l-hnh/01-hnh.github.io" # GitHub
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
-breadcrumbs            : true #false or true, false (default)
+breadcrumbs            : false #false or true, false (default)
 words_per_minute         : 200
 comments:
   provider               : # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "giscus", "custom"
@@ -103,7 +103,7 @@ analytics:
 # Site Author
 author:
   name             : "H.Lee"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/logo.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "**ML Engineer**<br>Signal Processing<br>Speech Recognition"
   location         : "To infinity, and beyond"
   email            :

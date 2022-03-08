@@ -1,7 +1,7 @@
 ---
 title: Portfolio
 layout: collection
-permalink: portfolio/
+permalink: /portfolio/
 collection: portfolio
 entries_layout: grid
 classes: wide
@@ -12,4 +12,3 @@ sidebar:
 
 ---
 
-Sample document listing for the collection `_portfolio`.
