@@ -1,10 +1,10 @@
-# 👩‍🚀 About 0l-hnh's DevLog
+# About 0l-hnh's DevLog
 
-## 🌏 I'm...
+## 👩‍🚀 I'm...
 
 지식의 바다를 여행하는 히치하이커
 
-## 🌙 Content
+## 🌏 Content
 
 * 시행착오
 * 이제는 잊지 말아야 할 것들

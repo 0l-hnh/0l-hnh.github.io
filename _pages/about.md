@@ -6,14 +6,14 @@ collection: about
 entries_layout: grid
 classes: wide
 
+title:  "About 0l-hnh's DevLog"
+
 author_profile: true
 sidebar:
   nav: "docs"
 
 ---
-  
-  
- 
+
 ## 👩‍🚀 I'm...
 지식의 바다를 여행하는 히치하이커
 

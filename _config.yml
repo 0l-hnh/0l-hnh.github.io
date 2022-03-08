@@ -103,7 +103,7 @@ analytics:
 # Site Author
 author:
   name             : "H.Lee"
-  avatar           : "/assets/images/logo.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/logo.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "**ML Engineer**<br>Signal Processing<br>Speech Recognition"
   location         : "To infinity, and beyond"
   email            :
