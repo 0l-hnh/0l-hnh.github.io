@@ -19,9 +19,12 @@ docs:
     - title: "OS"
       url: /os/
       category: "os"
+    - title: "Skills"
+      url: /skill/
+      category: "skill"
 - title: "Etc"
   children:
-    - title: "Devlog"
+    - title: "DevLog"
       url: /devlog/
       category: "devlog"
 
