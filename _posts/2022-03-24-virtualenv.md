@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Python] 독립적 개발 환경 구축을 위한 가상 환경 구축"
+title:  "[Python] 독립적 개발 환경을 위한 가상 환경 구축"
 date:   2022-03-24 01:08:00 +0900
 
 categories:
