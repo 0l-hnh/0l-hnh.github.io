@@ -52,5 +52,5 @@ venv 를 activate 한 뒤 원하는 python 패키지를 pip으로 설치하여 �
 deactivate
 ```
 
-## 참고 자료
+## 참고
 [참고 페이지 링크 (제타 위키)](https://zetawiki.com/wiki/Virtualenv_%EC%82%AC%EC%9A%A9%EB%B2%95)
