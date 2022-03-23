@@ -20,11 +20,11 @@ toc_sticky: true
 Torch 로 선언된 신경망의 변수들 중 조정할 필요가 없는 파라미터를 컨텍스트 매니저(context manager)의 no_grad로 제어하는 방법에 대하여 서술한다.
 ## 설명
 인공신경망을 훈련하는 가장 일반적인 방법은 모델의 출력과 데이터 레이블 간의 손실을 계산한 뒤, 오차를 역전파(Backpropagation)하여 파라미터를 최적화하는 것이다. 역전파는 모델 훈련에 핵심적인 부분이지만, 훈련 모델의 성능 측정을 위한 Validation, Evaluation 시 불필요한 과정이다.  따라서 연산량이 많은 모델 훈련 시,  backward 를 할 필요 없는 부분에 no_grad를 선언하면 메모리를 아낄 수 있다. 예를 들어, 용량이 크지 않은 GPU로 딥 러닝 학습을 수행할 시 흔히 발생하는 Out Of Memory (OOM) Error 방지에 도움을 준다.
-### Class 명
+## Class 명
 ```python
 class torch.no_grad
 ```
-### 예제
+## 예제
 * input tensor x에 대한 연산 처리 중 역전파 하지 않을 부분을 with torch.no_grad(): 로 블록 처리하는 예시  
 ```python
 >>> x = torch.tensor([1], requires_grad=True)
@@ -42,7 +42,7 @@ False
 >>> z = doubler(x)
 >>> z.requires_grad
 False
-```  
+```
 
-### 출처
+## 출처
 [출처 페이지 링크 (Torch 공식문서)](https://pytorch.org/docs/stable/generated/torch.no_grad.html)
