@@ -13,5 +13,5 @@
 ## 🚀 Keyword
 
 * #신호처리 #음성인식 #AI #주니어개발자
-* OS : Windows / Linux (Redhat, Ubuntu)
+* OS : Windows / Linux (CentOS, Ubuntu)
 * 주 사용 언어 : Python, C++
