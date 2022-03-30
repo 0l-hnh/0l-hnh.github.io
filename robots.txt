@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://0l-hnh.github.io/sitemap.xml
