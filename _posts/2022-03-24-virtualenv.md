@@ -15,6 +15,10 @@ toc: true
 toc_label: "목록"
 toc_icon: "bars"
 toc_sticky: true 
+
+sitemap:
+  changefreq: daily
+  priority : 1.0
 ---
 
 python의 가상 환경을 virtualenv로 관리하는 방법에 대하여 서술한다. 본 문서는 CentOS 7 환경을 기반으로 작성되었다.

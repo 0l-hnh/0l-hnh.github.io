@@ -15,6 +15,11 @@ toc: true
 toc_label: "목록"
 toc_icon: "bars"
 toc_sticky: true 
+
+sitemap:
+  changefreq: daily
+  priority : 1.0
+  
 ---
 
 python으로 한글 데이터를 다룰 때 빈번히 일어나는 인코딩 문제 해결에 대하여 작성하였다.

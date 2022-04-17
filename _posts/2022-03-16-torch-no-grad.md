@@ -15,6 +15,10 @@ toc: true
 toc_label: "목록"
 toc_icon: "bars"
 toc_sticky: true 
+
+sitemap:
+  changefreq: daily
+  priority : 1.0
 ---
 
 Torch 로 선언된 신경망의 변수들 중 조정할 필요가 없는 파라미터를 컨텍스트 매니저(context manager)의 no_grad로 제어하는 방법에 대하여 서술한다.
