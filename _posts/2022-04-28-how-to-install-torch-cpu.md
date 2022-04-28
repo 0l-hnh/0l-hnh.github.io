@@ -31,6 +31,6 @@ pip 으로 특정 라이브러리의 버전을 지정하여 설치할 때 가끔
 특정 torch 버전의 cpu only 사양을 설치해야 할 때 'ERROR: Could not find a version that satisfies the requirement' 라는 오류가 발생했다. 다운로드 페이지를 명시하지 않아서 발생한 오류이다.    
 #### 해결 방법
 -f https://download.pytorch.org/whl/torch_stable.html를 추가한다.  
-```bash
+``` bash
 pip install torch==1.8.0+cpu -f https://download.pytorch.org/whl/torch_stable.html 
 ```
