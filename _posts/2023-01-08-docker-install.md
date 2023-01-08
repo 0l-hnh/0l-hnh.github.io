@@ -73,7 +73,7 @@ Eg. Invalid release/repo/arch combination/
 removing mirrorlist with no valid mirrors: /var/cache/yum/x86_64/6/base/mirrorlist.txt
 Error: Cannot find a valid baseurl for repo: base
 ```
-설치 시도 시 아마 위와 같은 에러 로그를 마주칠 가능성이 높다. 이 경우 아래와 같이 미러리스트 텍스트 파일을 생성하고 진행한다.
+아마 위와 같은 에러 로그를 마주칠 가능성이 높다. 이 경우 아래와 같이 미러리스트 텍스트 파일을 생성하고 진행한다.
 ```bash
 $ echo "https://vault.centos.org/6.10/os/x86_64/" > /var/cache/yum/x86_64/6/base/mirrorlist.txt
 $ echo "http://vault.centos.org/6.10/extras/x86_64/" > /var/cache/yum/x86_64/6/extras/mirrorlist.txt
@@ -86,7 +86,8 @@ $ echo "http://vault.centos.org/6.10/sclo/x86_64/sclo" > /var/cache/yum/x86_64/6
 $ curl -O -sSL https://get.docker.com/rpm/1.7.1/centos-6/RPMS/x86_64/docker-engine-1.7.1-1.el6.x86_64.rpm
 $ rpm -Uvh docker-engine-1.7.1-1.el6.x86_64.rpm --nodeps
 ```
-3. 이후 docker -v 로 버전이 정상적으로 출력될 시 설치 완료이다. nvidia-docker 는 CentOS 6에서 지원되지 않기 때문에 설치할 수 없다.  
+3. 이후 docker -v 로 버전 출력을 확인하면 설치 완료.  
+nvidia-docker 는 CentOS 6에서 지원되지 않기 때문에 설치할 수 없다.  
 [참고 페이지](https://github.com/NVIDIA/nvidia-docker/issues/743)
 
 ## Ubuntu 18.04 Docker 설치
