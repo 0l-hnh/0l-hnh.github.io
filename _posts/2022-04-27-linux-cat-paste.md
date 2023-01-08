@@ -4,8 +4,8 @@ title:  "[Linux] cat, paste 명령어 사용법"
 date:   2022-04-27 12:10:00 +0900
 
 categories:
-  - os
-tags: [os, linux]
+  - linux
+tags: [linux]
 
 author_profile: true
 sidebar:

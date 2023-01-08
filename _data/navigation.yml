@@ -16,9 +16,11 @@ docs:
     - title: "Python"
       url: /python/
       category: "python"
-    - title: "OS"
-      url: /os/
-      category: "os"
+    - title: "Linux"
+      url: /linux/
+      category: "linux"
+    - title: "Docker"
+      url: /docker/
     - title: "Skills"
       url: /skill/
       category: "skill"
