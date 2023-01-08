@@ -23,9 +23,11 @@ sitemap:
 
 ## 설명
 딥 러닝 학습 등에 필요한 오픈소스 툴킷 사용 시 서버에 환경을 구축하는 것보다, Docker를 사용하여 어플리케이션 형식으로 동작시키는 것이 편리할 때가 있다.  
-Docker란 OS-level로 어플리케이션을 격리 실행하게 하는, 컨테이너 가상화 기술을 사용할 수 있게 하는 무료 소프트웨어이다.
-MLOps 사용을 이해할 때나 모델 서빙을 자동화하는 등 여러 모로 유용하게 쓰일 것 같아, Docker로 대표되는 컨테이너 가상화 기술에 대하여 지속적으로 포스팅하려 한다.  
+Docker란, OS-level로 어플리케이션을 격리 실행하게 하는 '컨테이너 가상화 기술'을 제공하는 무료 소프트웨어이다.
+MLOps 사용을 이해할 때나 모델 서빙을 자동화하는 등 여러 모로 유용하게 쓰일 것 같아 Docker로 대표되는 컨테이너 가상화 기술에 대하여 지속적으로 포스팅하려 한다.  
+
 ![도커 이미지](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Docker_%28container_engine%29_logo.svg/1920px-Docker_%28container_engine%29_logo.svg.png)  
+
 본 문서에서는 Docker 사용에 앞서, Linux에 docker와, 컨테이너 가상 환경에서 GPU를 사용하기 위해 nvidia-docker를 설치하는 방법에 대하여 서술한다.  
 GPU 사양에 맞는 nvidia-driver는 이미 설치되어 있다고 가정하여, 과정 서술을 생략하였다.
 
