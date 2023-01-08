@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "[Docker] Linux에 nvidia-docker 설치하기 (CentOS6, CentOS7, Ubuntu18.04)"
-date:   2022-04-28 12:10:00 +0900
+date:   2023-01-08 12:10:00 +0900
 
 categories:
   - docker
