@@ -24,7 +24,6 @@ sitemap:
 ## 설명
 ESPNet이란 음성 인식, 음성 합성 관련 레시피를 제공하는 Toolkit 이다. 다양한 모듈 및 훈련에 필요한 도구가 포함되어 있다. 'espnet' 실행을 위해서는 KALDI 설치가 필수이며, 'espnet2'는 pytorch 설치 만으로 실행 가능하다.  
 본 문서에서는 nvidia-docker로 ESPnet2 훈련 예제 실행 방법을 서술한다.  
-[Docker 설치 관련 포스트](https://0l-hnh.github.io/docker/docker-install  )
 
 ## 상세  
 ### ESPNet 설치  
@@ -75,6 +74,7 @@ $ sudo semanage fcontext -a -t container_runtime_exec_t /usr/bin/nvidia-docker
 $ sudo restorecon -v /usr/bin/nvidia-docker
 ```
 
-## 참고 사이트
-[ESPNet 공식 문서](https://espnet.github.io/espnet/docker.html  )
+## 참고 사이트  
+[Docker 설치 관련 포스트](https://0l-hnh.github.io/docker/docker-install  )
+[ESPNet 공식 문서](https://espnet.github.io/espnet/docker.html  )  
 [nvidia-docker 권한 에러](https://github.com/NVIDIA/nvidia-docker/issues/814  )
