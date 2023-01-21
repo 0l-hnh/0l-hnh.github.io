@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[ASR] ESPnet yesno 예제 정상 실행 LOG"
+title:  "[ASR] ESPNet yesno 예제 정상 실행 LOG"
 date:   2023-01-21 11:10:00 +0900
 
 categories:
@@ -22,7 +22,7 @@ sitemap:
 ---
 
 ## 설명  
-본 문서는 nvidia-docker로 ESPnet2 훈련 예제 중 yesno 예제 실행 시 출력되는 LOG 기록용으로 작성되었다.  
+본 문서는 nvidia-docker로 ESPNet2 훈련 예제 중 yesno 예제 실행 시 출력되는 LOG 기록용으로 작성되었다.  
 
 ## 상세  
 ### LOG 전문    
