@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "[ASR] ESPnet yesno 예제 정상 실행 LOG"
-date:   2023-01-14 11:10:00 +0900
+date:   2023-01-21 11:10:00 +0900
 
 categories:
   - asr

@@ -46,7 +46,8 @@ $  ./run.sh --docker-gpu 0 --is-egs2 --docker-egs yesno/asr1 --ngpu 1
 ```bash
 $ NV_GPU='0' nvidia-docker run -i --rm --name ${name} -v /data/espnet/egs:/espnet/egs -v /data/espnet/espnet:/espnet/espnet -v /data/espnet/test:/espnet/test -v /data/espnet/utils:/esp       net/utils -v /data/espnet/egs2:/espnet/egs2 -v /data/espnet/espnet2:/espnet/espnet2 -v /dev/shm:/dev/shm espnet/espnet:gpu-latest-user-hanni /bin/bash -c 'cd /espnet/egs2/yesno/asr1; ./run.sh --ngpu 1’
 ```
-정상 실행 시 출력되는 로그 파일은 추후 추가 예정  
+정상 실행 시 출력되는 로그 파일은 별도 포스트로 정리  
+[링크](https://0l-hnh.github.io/asr/espnet-yesno-log/ )  
 
 ## 시행 착오
 ### nvcc: command not found CUDA was not found in your system
