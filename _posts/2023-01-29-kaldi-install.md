@@ -30,8 +30,7 @@ phone의 전이 확률을 계산하는 AM과 n-gram LM을 사용하는 방식을
 ## 상세  
 ### Kaldi 설치  
 아래 설치 과정은 CentOS7을 기준으로 하며, Kaldi 설치 시 요구되는 최소 사항을 모두 만족하였다고 가정한다.  
-Kaldi 컴파일을 위해서는 Cmake, gcc, python2, python3, nvidia 드라이버 및 사용 GPU에서 지원하는 버전의 CUDA가 커널에 설치되어 있어야 한다.  
-또한 수학 라이브러리인 MKL 혹은 ATLAS를 필요로 한다.  
+Kaldi 컴파일을 위해서는 Cmake, gcc, python2, python3, nvidia 드라이버 및 사용 GPU에서 지원하는 버전의 CUDA가 커널에 설치되어 있어야 한다. 또한 수학 라이브러리인 MKL 혹은 ATLAS를 필요로 한다.  
 위 필수 설치 라이브러리들을 갖춘 후 아래와 같이 Kaldi를 설치할 수 있다.  
 
 1. git 레포지토리에서 최신 소스를 다운로드한다.  
