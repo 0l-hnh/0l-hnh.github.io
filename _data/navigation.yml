@@ -21,6 +21,7 @@ docs:
       category: "linux"
     - title: "Docker"
       url: /docker/
+      category: "docker"
     - title: "Skills"
       url: /skill/
       category: "skill"
