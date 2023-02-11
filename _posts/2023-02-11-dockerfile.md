@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "[Docker] Dockerfile로 이미지 생성"
-date:   2023-02-11 11:10:00 +0900
+date:   2023-02-11 10:10:00 +0900
 
 categories:
   - docker
