@@ -5,7 +5,7 @@ date:   2023-01-08 12:10:00 +0900
 
 categories:
   - docker
-tags: [docker, container, linux]
+tags: [docker, linux]
 
 author_profile: true
 sidebar:
