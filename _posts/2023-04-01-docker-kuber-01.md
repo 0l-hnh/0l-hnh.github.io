@@ -638,44 +638,44 @@ $ usermod -aG docker ${USER}
 
 [Docker 공식 설치 문서](https://docs.docker.com/engine/install/)
 
+설치되는 docker 관련 주요 패키지는 아래와 같다.  
+
+* docker-ce : docker engine
+* docker-ce-cli : 명령어 패키지 (docker-e 는 enterprise 버전)
+
 Docker 안에 Docker-compose가 포함되어 있다.  
 
 ### 03. Docker 실습
 #### Docker 설치 패키지 및 실행 방식 
-* docker-ce : docker engine
-* docker-ce-cli : 명령어 패키지 (docker-e 는 enterprise 버전)
+* 주요 개념 : docker, containerd, runc
+* runc에서의 명령어가 dockerd로 전달되고, docker 서버가 올라갈 때 containerd (종속되어 있음)가 실행됨
+* 컨테이너가 이미 실행되어 있으면 runc는 필요가 없으니까 내려감  
+* prep -fl 명령어로 확인 가능
 
-docker, containerd, runc 로 실행됨
-runc에서의 명령어가 dockerd로 전달되고, docker 서버가 올라갈 때 containerd (종속되어 있음)가 실행된다  
-컨테이너가 이미 실행되어 있으면 runc는 필요가 없으니까 내려간다  
-prep -fl 명령어로 확인 가능함
-
+<예시>
 ```bash
 $ prep -fl docker
 3638 dockerd
 ```
-이 때 'dockerd = docker 서버 = docker 엔진' 이다.  
+(이 때 'dockerd = docker 서버 = docker 엔진' 이다.)  
 
-docker에 root 계정이 필요한 것은 docker socekt에 접근을 해야 하는데, 이 권한이 없어서 못 하는 것 (위치 : /var/run/docker.sock)  
+Docker 실행 시 권한 이슈가 발생한다면, 원인은 dockerd 실행 프로세스에 있다  
+docker socekt에 접근을 해야 하는데, 이 권한이 없어서 못 하는 것 (위치 : /var/run/docker.sock)  
 현재 사용 중인 계정에 docker group 권한을 주면 sudo 없이 실행 가능하다. 
 
+<예시>
 ```bash
 $ sudo usermod -aG docker $(USER)
 ```
 
 #### Docker 이미지 실행  
+* Docker image 저장소  
+Docker image는 기본적으로 docker hub에서 pull 하여 사용하지만, 다른 사이트 들도 사용 가능  
+(예시 : [Docker Hub](https://hub.docker.com/), [AWS Gallery](https://gallery.ecr.aws/) )  
+* Docker image는 레이어 구조로 되어 있음
+* Docker image는 기능적으로 필요한 바이너리 파일들로 구성되어 있으며, 커널 기능은 포함하지 않음
 
-기본은 docker hub에서 pull 하게 되지만, 다른 사이트 들도 사용 가능하다  
-
-<예시>  
-[Docker Hub](https://hub.docker.com/)  
-[AWS Gallery](https://gallery.ecr.aws/)  
-
-Docker 이미지는 레이어 구조로 되어 있다.  
-특정한 역할을 하는 레이어들을 쌓아서 만든다고 생각하면 된다.  
-최초 실행 시 local cache에 이미지가 저장되며, 메모리에 저장이 되지만 추후에 여러 개의 컨테이너를 실행할 때 해당 이미지의 크기만큼 계속 늘어나는 것은 아니다.  
-
-실습을 위해 웹 서버인 아파치를 받아왔다.  
+예시로, 웹 서버인 아파치를 받아왔다.  
 ```bash
 $ docker pull httpd:2.4
 ```
@@ -695,6 +695,7 @@ Status: Downloaded newer image for httpd:2.4
 docker.io/library/httpd:2.4
 ```
 
+레이어 구조를 갖는 docker 이미지가 pull 되는 것을 확인할 수 있다.  
 단, 그냥 run 하면 컨테이너가 foreground로 실행이 되며 dockerd 가 실행되는 동안 터미널을 쓸 수 없게 된다.  
 Background 로 컨테이너를 실행하고 싶다면, run 시 -d 옵션 (=dettach)을 준다.
 
@@ -703,4 +704,86 @@ $ docker run -d httpd:2.4
 d808b0592440312cd945e16ba848af202d9aaefb6257f03cb9c97d3accb67298
 ```
 
-표준 입출력이 뜨지 않으며 background로 실행이 되었다.
+표준 입출력이 뜨지 않으며 background로 실행이 되었다.  
+
+```bash
+$ docker exec ${CONTAINER} ll
+```
+
+컨테이너에 명령어를 던져보자.  
+컨테이너 안에서 실행되는 프로세스는 컨테이너 밖에서도 볼 수 있고, 컨테이너 밖에서 kill 할 수도 있다.  
+
+Docker Apache 안에서 확인하면, 커널이 없다.  
+ls 등 명령어 실행 시 커널은 컨테이너 외부 로컬 환경에서 처리한다.  
+단 바이너리 파일은 컨테이너 내부에 있는 것을 참조하여, 환경 별로 서로 격리된다.  
+따라서 다른 환경의 컨테이너를 하나의 로컬에서 띄워도 OS의 라이브러리를 쓰지 않기 때문에, 충돌이 나지 않고 배포에도 용이하다.  
+
+컨테이너도 기본적으로 LAN 카드를 가지고 있어서, 만약 컨테이너 내부에서 필요한 게 있다면 설치해서 쓸 수 있다.  
+
+```bash
+$ docker -it exec ${CONTAINER} /bin/bash
+```
+
+컨테이너의 상태 전이를 도식화 하면 아래 이미지와 같다.  
+
+![컨테이너의 상태 전이](https://i.ibb.co/6ybbRZ8/2023-04-01-160101.png)
+
+#### Docker 기본 명령어
+
+```bash
+# 컨테이너 실행
+$ docker run ${image}
+
+# 컨테이너 중지
+$ docker stop ${container}
+
+# 컨테이너 삭제
+$ docker rm $(docker ps -aq)
+$ docker rm ${container}
+
+# 컨테이너 실행
+$ docker exec ${container}
+
+# 컨테이너 내부 설정 확인
+$ docker inspect ${container, image}
+```
+#### Docker 저장 공간 (volume)
+* docker run 시 -v 옵션으로 외부 디렉토리를 마운트 하면 컨테이너 내부 / 외부에서 공통으로 참조함  
+   
+아래 예시는 mysql 이미지를 실행했을 때, 컨테이너 내부에서 생성한 db를 보존하도록 실행 환경의 디렉토리를 사용하는 방법이다.  
+
+```bash 
+$ docker run -d --env MYSQL_ROOT_PASSWORD=pass -v /home/vagrant/docker-kuber/mydb/:/var/lib/mysql --name mydb mysql:5.7
+$ docker exec -it mydb /bin/bash
+
+#mydb container 내부
+$ mysql -p
+(mysql) create database mydb;
+(mysql) use mydb;
+(mysql) create table t1
+    -> (name varchar(20),
+    -> id char(10));
+(mysql) insert into t1 values('hong kildong', 'kildong');
+```  
+
+컨테이너 종료하여도, 동일한 디렉토리를 mount 하여 이미지를 실행한다면 db를 동일하게 사용할 수 있다.  
+
+#### Docker 네트워크
+* Docker 포트를 22로 쓰면, 현재 ssh로 쓰고 있는 포트와 충돌이 나 오류 발생
+* 8000번 이후로 설정
+
+```bash
+$ docker run -d --name myhttpd -p 8000:80 httpd:2.4
+$ ip addr show eth1
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 08:00:27:67:37:d4 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.51.10/24 brd 192.168.51.255 scope global noprefixroute eth1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::a00:27ff:fe67:37d4/64 scope link 
+       valid_lft forever preferred_lft forever
+
+$ sudo iptables -L -t nat -n | grep 8000
+DNAT       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8000 to:172.17.0.5:80
+```
+
+192.168.51.10:8000 으로 접속하면 외부에서 해당 포트에 열린 도커 컨테이너(이 경우 아파치 서버)를 확인 가능하다.
