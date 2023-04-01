@@ -21,7 +21,7 @@ sitemap:
   priority : 1.0
 ---
 
-4월 동안 Docker(Docker), 쿠버네티스 관련 재직자 국비 지원 강의를 총 5회 수강하게 되어 해당 내용을 정리하려 한다.  
+4월 동안 Docker(도커), 쿠버네티스 관련 재직자 지원 강의를 총 5회 수강하게 되어 해당 내용을 정리하려 한다.  
 
 ## 2023-04-01 강의 노트  
 ### 00. OT
@@ -74,7 +74,7 @@ Vagrant는 gui 가 없으니, cmd를 열어서 명령어로 실행하면 된다.
 Vagrant에서 각 가상 환경을 'Box'라고 부르며, 필요에 의해 OS 체제를 설치하게 된다.  
 Vagrantfile 예시는 아래와 같다.  
 
-```cmd
+```ini
 Vagrant.configure("2") do |config|
         config.vm.define "vm-name" do |cfg|
                 cfg.vm.box = "centos/7"
@@ -98,7 +98,7 @@ Vagrant 이미지를 다운로드 받아서 VM으로 CentOS 7 환경을 실행�
 <summary>VM 생성 후 ssh 설정하는 로그 전문</summary>
 <div markdown="1">
 
-```cmd
+```bash
 PS C:\Users\0lhnh\Desktop\WORKS\2023_Docker_Kuber> vagrant
 Usage: vagrant [options] <command> [<args>]
 
@@ -639,4 +639,68 @@ $ usermod -aG docker ${USER}
 [Docker 공식 설치 문서](https://docs.docker.com/engine/install/)
 
 Docker 안에 Docker-compose가 포함되어 있다.  
-tmi : Docker보다 쿠버네티스 설치가 더 어렵다고 함...  
+
+### 03. Docker 실습
+#### Docker 설치 패키지 및 실행 방식 
+* docker-ce : docker engine
+* docker-ce-cli : 명령어 패키지 (docker-e 는 enterprise 버전)
+
+docker, containerd, runc 로 실행됨
+runc에서의 명령어가 dockerd로 전달되고, docker 서버가 올라갈 때 containerd (종속되어 있음)가 실행된다  
+컨테이너가 이미 실행되어 있으면 runc는 필요가 없으니까 내려간다  
+prep -fl 명령어로 확인 가능함
+
+```bash
+$ prep -fl docker
+3638 dockerd
+```
+이 때 'dockerd = docker 서버 = docker 엔진' 이다.  
+
+docker에 root 계정이 필요한 것은 docker socekt에 접근을 해야 하는데, 이 권한이 없어서 못 하는 것 (위치 : /var/run/docker.sock)  
+현재 사용 중인 계정에 docker group 권한을 주면 sudo 없이 실행 가능하다. 
+
+```bash
+$ sudo usermod -aG docker $(USER)
+```
+
+#### Docker 이미지 실행  
+
+기본은 docker hub에서 pull 하게 되지만, 다른 사이트 들도 사용 가능하다  
+
+<예시>  
+[Docker Hub](https://hub.docker.com/)  
+[AWS Gallery](https://gallery.ecr.aws/)  
+
+Docker 이미지는 레이어 구조로 되어 있다.  
+특정한 역할을 하는 레이어들을 쌓아서 만든다고 생각하면 된다.  
+최초 실행 시 local cache에 이미지가 저장되며, 메모리에 저장이 되지만 추후에 여러 개의 컨테이너를 실행할 때 해당 이미지의 크기만큼 계속 늘어나는 것은 아니다.  
+
+실습을 위해 웹 서버인 아파치를 받아왔다.  
+```bash
+$ docker pull httpd:2.4
+```
+
+그리고 실행한다..
+
+```bash
+$ docker run httpd:2.4
+2.4: Pulling from library/httpd
+f1f26f570256: Pull complete 
+a6b093ae1967: Pull complete 
+6b400bbb27df: Pull complete 
+d9833ead928a: Pull complete 
+ace056404ed3: Pull complete 
+Digest: sha256:f3e9eb9acace5bbc13c924293d2247a65bb59b8f062bcd98cd87ee4e18f86733
+Status: Downloaded newer image for httpd:2.4
+docker.io/library/httpd:2.4
+```
+
+단, 그냥 run 하면 컨테이너가 foreground로 실행이 되며 dockerd 가 실행되는 동안 터미널을 쓸 수 없게 된다.  
+Background 로 컨테이너를 실행하고 싶다면, run 시 -d 옵션 (=dettach)을 준다.
+
+```bash 
+$ docker run -d httpd:2.4
+d808b0592440312cd945e16ba848af202d9aaefb6257f03cb9c97d3accb67298
+```
+
+표준 입출력이 뜨지 않으며 background로 실행이 되었다.
