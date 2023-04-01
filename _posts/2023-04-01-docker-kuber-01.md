@@ -652,7 +652,7 @@ Docker 안에 Docker-compose가 포함되어 있다.
 * 컨테이너가 이미 실행되어 있으면 runc는 필요가 없으니까 내려감  
 * prep -fl 명령어로 확인 가능
 
-<예시>
+<예시>  
 ```bash
 $ prep -fl docker
 3638 dockerd
