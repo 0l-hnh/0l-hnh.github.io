@@ -652,7 +652,7 @@ Docker 안에 Docker-compose가 포함되어 있다.
 * 컨테이너가 이미 실행되어 있으면 runc는 필요가 없으니까 내려감  
 * prep -fl 명령어로 확인 가능
 
-<예시>  
+다음은 예시이다.    
 ```bash
 $ prep -fl docker
 3638 dockerd
@@ -664,7 +664,7 @@ Docker 실행 시 권한 이슈가 발생한다면, 원인은 dockerd 실행 프
 docker socekt에 접근을 해야 하는데, 이 권한이 없어서 못 하는 것 (위치 : /var/run/docker.sock)  
 현재 사용 중인 계정에 docker group 권한을 주면 sudo 없이 실행 가능하다. 
 
-<예시>  
+다음은 예시이다.    
 ```bash
 $ sudo usermod -aG docker $(USER)
 ```  
