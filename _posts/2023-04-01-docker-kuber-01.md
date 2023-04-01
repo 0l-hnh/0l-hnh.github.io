@@ -656,7 +656,8 @@ Docker 안에 Docker-compose가 포함되어 있다.
 ```bash
 $ prep -fl docker
 3638 dockerd
-```
+```  
+
 (이 때 'dockerd = docker 서버 = docker 엔진' 이다.)  
 
 Docker 실행 시 권한 이슈가 발생한다면, 원인은 dockerd 실행 프로세스에 있다  
@@ -666,7 +667,7 @@ docker socekt에 접근을 해야 하는데, 이 권한이 없어서 못 하는 
 <예시>
 ```bash
 $ sudo usermod -aG docker $(USER)
-```
+```  
 
 #### Docker 이미지 실행  
 * Docker image 저장소  
@@ -678,7 +679,7 @@ Docker image는 기본적으로 docker hub에서 pull 하여 사용하지만, �
 예시로, 웹 서버인 아파치를 받아왔다.  
 ```bash
 $ docker pull httpd:2.4
-```
+```  
 
 그리고 실행한다..
 
@@ -693,7 +694,7 @@ ace056404ed3: Pull complete
 Digest: sha256:f3e9eb9acace5bbc13c924293d2247a65bb59b8f062bcd98cd87ee4e18f86733
 Status: Downloaded newer image for httpd:2.4
 docker.io/library/httpd:2.4
-```
+```  
 
 레이어 구조를 갖는 docker 이미지가 pull 되는 것을 확인할 수 있다.  
 단, 그냥 run 하면 컨테이너가 foreground로 실행이 되며 dockerd 가 실행되는 동안 터미널을 쓸 수 없게 된다.  
@@ -702,13 +703,13 @@ Background 로 컨테이너를 실행하고 싶다면, run 시 -d 옵션 (=detta
 ```bash 
 $ docker run -d httpd:2.4
 d808b0592440312cd945e16ba848af202d9aaefb6257f03cb9c97d3accb67298
-```
+```  
 
 표준 입출력이 뜨지 않으며 background로 실행이 되었다.  
 
 ```bash
 $ docker exec ${CONTAINER} ll
-```
+```  
 
 컨테이너에 명령어를 던져보자.  
 컨테이너 안에서 실행되는 프로세스는 컨테이너 밖에서도 볼 수 있고, 컨테이너 밖에서 kill 할 수도 있다.  
@@ -722,7 +723,7 @@ ls 등 명령어 실행 시 커널은 컨테이너 외부 로컬 환경에서 �
 
 ```bash
 $ docker -it exec ${CONTAINER} /bin/bash
-```
+```  
 
 컨테이너의 상태 전이를 도식화 하면 아래 이미지와 같다.  
 
@@ -746,7 +747,7 @@ $ docker exec ${container}
 
 # 컨테이너 내부 설정 확인
 $ docker inspect ${container, image}
-```
+```  
 #### Docker 저장 공간 (volume)
 * docker run 시 -v 옵션으로 외부 디렉토리를 마운트 하면 컨테이너 내부 / 외부에서 공통으로 참조함  
    
@@ -784,6 +785,6 @@ $ ip addr show eth1
 
 $ sudo iptables -L -t nat -n | grep 8000
 DNAT       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8000 to:172.17.0.5:80
-```
+```  
 
 192.168.51.10:8000 으로 접속하면 외부에서 해당 포트에 열린 도커 컨테이너(이 경우 아파치 서버)를 확인 가능하다.
