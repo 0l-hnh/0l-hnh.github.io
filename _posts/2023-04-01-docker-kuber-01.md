@@ -771,7 +771,8 @@ $ mysql -p
 
 #### Docker 네트워크
 * Docker 포트를 22로 쓰면, 현재 ssh로 쓰고 있는 포트와 충돌이 나 오류 발생
-* 8000번 이후로 설정
+* 로컬은 8000번 이후로 설정, 컨테이너에서 노출된 포트는 기본적으로 80번 
+* Docker에서 생성된 bridge 를 공유하면, 컨테이너 간 통신 가능. 
 
 ```bash
 $ docker run -d --name myhttpd -p 8000:80 httpd:2.4
@@ -787,4 +788,76 @@ $ sudo iptables -L -t nat -n | grep 8000
 DNAT       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8000 to:172.17.0.5:80
 ```  
 
-192.168.51.10:8000 으로 접속하면 외부에서 해당 포트에 열린 도커 컨테이너(이 경우 아파치 서버)를 확인 가능하다.
+192.168.51.10:8000 으로 접속하면 외부에서 해당 포트에 열린 도커 컨테이너(이 경우 아파치 서버)를 확인 가능하다.  
+
+컨테이너를 실행하고, 내부에서 ip addr, ip route 확인하면 eth0 장치를 통해서 네트워크 연결이 된다는 것을 확인할 수 있다.  
+컨테이너에서 인터넷에 연결될 때는, 컨테이너 -> Docker0 (현재 bridge) -> eth0 순으로 연결해서 패킷을 전송한다.  
+같은 Bride 에 연결 되어 있는 컨테이너 간에는 통신이 가능하다.  
+(예시 : docker 로 올린 centos8 서버와, 아파치 웹 서버는 ip를 사용한 상호 접근이 가능하다)  
+
+하지만, 다른 bridge 를 쓰고 싶을 경우 신규 bridge를 생성한다.
+
+```bash
+$ docker network create --driver bridge mybridge
+2abe7e00b520b2357a876ca5878895422aa8154d94bf72b111d238c9fe5ea5fd
+$ brctl show
+bridge name     bridge id               STP enabled     interfaces
+br-2abe7e00b520         8000.0242d6cd544d       no
+docker0         8000.0242d178e7ef       no              veth4ffce22
+                                                        vethf21c95a
+```
+
+신규 bridge가 생성되었으며, 인터페이스는 없다는 것을 알 수 있다.  
+이 신규 사용자정의 bridge에 DB 서버를 연동해보자.  
+
+```bash
+$ docker run -d --name mybridge_container -e MYSQL_ROOT_PASSWORD=pass --network mybridge -v /home/vagrant/docker-kuber/mydb:/var/lib/mysql mysql:5.7
+$ docker inspect mybridge_container | grep IP
+"IPAddress": "172.18.0.2",
+"IPPrefixLen": 16,
+"IPv6Gateway": "",
+```
+
+"172.18.0.2"로 전혀 다른 주소를 가지게 되었다.  
+
+그런데, 서로 같은 bridge를 공유하지 않는 컨테이너 간 통신이 필요한 경우도 있다.  
+이 경우 연결이 필요한 서버 (예시 : 아파치 웹 서버 -> DB)의 다른 LAN 카드에 두 번째 bridge 를 연결한다. 
+
+```bash
+$ docker network connect mybridge apache
+```
+연결한 뒤 아파치 웹 컨테이너 서버에 접속하여, 네트워크 정보를 확인한다.
+
+```bash
+$ docker exec -it apache /bin/bash
+
+#아파치 웹 서버 내부
+$ apt update
+$ apt install net-tools
+$ ifconfig
+$ apt install iputils-ping
+$ ping 172.18.0.2
+PING 172.18.0.2 (172.18.0.2) 56(84) bytes of data.
+64 bytes from 172.18.0.2: icmp_seq=1 ttl=64 time=0.074 ms
+64 bytes from 172.18.0.2: icmp_seq=2 ttl=64 time=0.056 ms
+64 bytes from 172.18.0.2: icmp_seq=3 ttl=64 time=0.056 ms
+64 bytes from 172.18.0.2: icmp_seq=4 ttl=64 time=0.307 ms
+```  
+172.17.0.3인 아파치 서버에서 DB 서버에 정상적으로 접속이 된다.  
+
+또한, ip range와 subnet을 설정하기 위해서는 인자를 주어서 bridge를 생성한다. 
+
+```bash
+$ docker network create --driver bridge --subnet 172.30.0.0/16 --ip-range 172.30.0.0/24 --gateway 172.30.0.1 newbridge
+```  
+
+docker network inspect 로 해당 브리지로 접속한 컨테이너를 확인할 수 있다.  
+```bash
+$ docker network inspect ${bridge}
+```  
+
+사용하지 않는 network 에 대해서는 prune, rm 등으로 삭제 가능하다.  
+
+### 차주에는 ...
+* Dockerfile 명령어, Docker image 만들기 등
+* 예습 필요 : yaml 파일 작성법 (쿠버네티스, Dockerfile 등 작성에 필요)
