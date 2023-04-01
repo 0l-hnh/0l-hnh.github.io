@@ -664,7 +664,7 @@ Docker 실행 시 권한 이슈가 발생한다면, 원인은 dockerd 실행 프
 docker socekt에 접근을 해야 하는데, 이 권한이 없어서 못 하는 것 (위치 : /var/run/docker.sock)  
 현재 사용 중인 계정에 docker group 권한을 주면 sudo 없이 실행 가능하다. 
 
-<예시>
+<예시>  
 ```bash
 $ sudo usermod -aG docker $(USER)
 ```  
@@ -681,7 +681,7 @@ Docker image는 기본적으로 docker hub에서 pull 하여 사용하지만, �
 $ docker pull httpd:2.4
 ```  
 
-그리고 실행한다..
+그리고 실행한다..  
 
 ```bash
 $ docker run httpd:2.4
@@ -698,7 +698,7 @@ docker.io/library/httpd:2.4
 
 레이어 구조를 갖는 docker 이미지가 pull 되는 것을 확인할 수 있다.  
 단, 그냥 run 하면 컨테이너가 foreground로 실행이 되며 dockerd 가 실행되는 동안 터미널을 쓸 수 없게 된다.  
-Background 로 컨테이너를 실행하고 싶다면, run 시 -d 옵션 (=dettach)을 준다.
+Background 로 컨테이너를 실행하고 싶다면, run 시 -d 옵션 (=dettach)을 준다.  
 
 ```bash 
 $ docker run -d httpd:2.4
@@ -727,7 +727,7 @@ $ docker -it exec ${CONTAINER} /bin/bash
 
 컨테이너의 상태 전이를 도식화 하면 아래 이미지와 같다.  
 
-![컨테이너의 상태 전이](https://i.ibb.co/6ybbRZ8/2023-04-01-160101.png)
+![컨테이너의 상태 전이](https://i.ibb.co/6ybbRZ8/2023-04-01-160101.png)  
 
 #### Docker 기본 명령어
 
