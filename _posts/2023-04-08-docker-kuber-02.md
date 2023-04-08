@@ -170,8 +170,9 @@ $ docker image load -i mysql.tar
 #### 주 사용 명령어  
 추후 정리 예정
 
-#### 실습  
-Docker 이미지를 빌드하는 방법으로, Dockerfile을 작성한 뒤 docker build 로 빌드할 수 있다.  
+#### Dockerfile 내 커맨드 예제  
+##### FROM, RUN
+FROM으로는 베이스 이미지를 설정하고, RUN은 이미지 빌드 시 실행되는 명령어를 입력하는 부분이다.  
 예를 들어, CentOs8을 베이스 이미지로 사용하는 어떤 이미지를 아래와 같이 만들 수 있다.  
 ```Ini
 FROM centos:8
@@ -203,6 +204,8 @@ REPOSITORY    TAG       IMAGE ID       CREATED              SIZE
 sample        latest    4d422c5e3d5a   About a minute ago   231MB
 ```
 성공적으로 빌드된 것을 확인될 수 있다.  
+
+##### ENTRYPOINT, CMD
 ENTRYPOINT, CMD는 빌드될 때 가장 마지막에 있는 하나만 Command로 실행이 된다.  
 단 ENTRYPOINT와 CMD는 각각 한 번씩 사용 가능하며, 이 경우 CMD가 ENTRYPOINT의 인수로 들어간다.  
 ```Ini
@@ -339,3 +342,26 @@ $ docker run sample
   PID TTY          TIME CMD
     1 ?        00:00:00 sh
 ```
+
+##### LABEL, ONBUILD
+또, Dockerfile 내에 LABLE 지정 시 관리자, 이름 등을 지정할 수 있다.  
+
+ONBUILD 를 쓰면, 해당 Dockerfile 로 생성한 이미지를 베이스 이미지로 한 다른 Dockerfile을 빌드할 때 실행할 명령을 기술할 수 있다.  
+
+```Ini
+FROM ubuntu:18.04
+RUN apt-get update \
+    && apt-get install -y nginx
+ONBUILD ADD ./src/website.tar  /var/www/html
+CMD ["nginx","-g","daemon off;"]
+```
+```bash
+$ docker build -t mynginx -f nginx_dockerfile .
+#그냥 실행해본다. 이때는 ONBUILD에 정의한 website.tar이 보이지 않는다.
+$ docker run -d -name=mynginx mynginx:latest
+```
+위에서 빌드한 mynginx 이미지를 베이스로 사용하여 다시 빌드한다.  
+```Ini
+FROM myngix
+```
+이제 ONBUILD에 정의한 website를 확인 가능하다.  
