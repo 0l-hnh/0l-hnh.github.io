@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] Docker 강의 정리 (2)"
+title:  "[Docker] Docker 강의 정리 (2) - Docker 이미지"
 date:   2023-04-08 10:10:00 +0900
 
 categories:
@@ -39,7 +39,8 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 64 bytes from 8.8.8.8: icmp_seq=2 ttl=114 time=38.4 ms
 64 bytes from 8.8.8.8: icmp_seq=3 ttl=114 time=34.5 ms
 64 bytes from 8.8.8.8: icmp_seq=4 ttl=114 time=35.8 ms
-```
+```  
+
 잘 되는 것을 확인했다.  
 
 Docker 의 bridge network type을 Host 로 하는 것을 해보자  
@@ -55,7 +56,7 @@ $ docker run -it --network host --name centos8 centos:8 /bin/bash
 ```
 
 ### 05. Docker image
-#### 컨테이너에서 docker 이미지 만들기  
+#### 컨테이너로 docker 이미지 커밋  
 apache 컨테이너를 사용해서 실습해본다.
 ```bash
 $ docker run --name new_apache -d httpd:2.4
@@ -102,3 +103,28 @@ hello-world   latest    feb5d9fea6a5   18 months ago   13.3kB
 centos        8         5d0da3dc9764   18 months ago   231MB
 ```
 원하는 이미지가 생성된 것을 알 수 있다.  
+이미지를 실행 후 접속해서, 수정된 컨테이너 설정이 잘 저장되었는지 확인한다.  
+
+```bash
+$ docker run --name test_image -d test_image:v1.0
+$ docker exec -it test_image /bin/bash
+
+#컨테이너 내부 설정 파일 확인
+$ cat /usr/local/apache2/htdocs/index.html 
+<html><body><h1>Hello This is my Apache Server</h1></body></html>
+```
+이전 수정 내역이 남아있는 것을 확인했다.  
+만든 이미지를 본인의 Dockerhub에 업로드 할 수도 있다.  
+
+#### 컨테이너를 tar 파일로 출력  
+실행 중인 docker 컨테이너를 tar 파일로 저장하는 방법도 있다.  
+
+```bash
+#일단 컨테이너를 실행한다
+$ docker run --name new_apache2 -d httpd:2.4
+$ docker container export new_apache2 -o httpd.tar
+$ ll
+total 143164
+-rw-rw-r--. 1 vagrant vagrant 146595328 Apr  1 21:23 httpd.tar
+```
+.tar 형식 파일이 저장된 것을 확인 가능하다.  
