@@ -26,6 +26,7 @@ Docker(도커), 쿠버네티스 관련 재직자 지원 수업의 두 번째 강
 ## 2023-04-08 강의 노트  
 ### 04. Docker 실습 이어서 
 시작 전에 Network 문제가 없는지 확인한다.  
+
 * NetworkManager로 확인하는 방법 
 ```bash
 $ sudo yum install NetworkManager-tui
@@ -42,7 +43,6 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 ```  
 
 잘 되는 것을 확인했다.  
-
 Docker 의 bridge network type을 Host 로 하는 것을 해보자  
 ```bash
 $ docker network create -d host myhost
@@ -50,7 +50,6 @@ Error response from daemon: only one instance of "host" network is allowed
 ```
 "host"는 하나밖에 쓰지 못 하며, 삭제도 하지 못 한다.  
 만들어진 host 를 사용한다.  
-
 ```bash 
 $ docker run -it --network host --name centos8 centos:8 /bin/bash
 ```
@@ -69,7 +68,6 @@ $ vi /usr/local/apache2/htdocs/index.html
 $ cat /usr/local/apache2/htdocs/index.html
 ```
 위에서 수정한 내용은 컨테이너 삭제 시 사라진다.  
-
 ```bash
 docker stop $(docker ps -q); docker rm $(docker ps -aq)
 94f2fea86c41
@@ -78,7 +76,6 @@ b8fb32487b6b
 ```
 다시 apache 이미지를 올려서 확인을 하면, 이전 컨테이너에서 수정한 내용이 없다는 것을 알 수 있다.  
 컨테이너 내에서 수정한 내역을 계속 사용하고 싶다면, 컨테이너를 커밋해서 이미지로 생성한다.  
-
 ```bash
 $ docker run --name new_apache -d httpd:2.4
 $ docker exec -it new_apache /bin/bash
@@ -104,7 +101,6 @@ centos        8         5d0da3dc9764   18 months ago   231MB
 ```
 원하는 이미지가 생성된 것을 알 수 있다.  
 이미지를 실행 후 접속해서, 수정된 컨테이너 설정이 잘 저장되었는지 확인한다.  
-
 ```bash
 $ docker run --name test_image -d test_image:v1.0
 $ docker exec -it test_image /bin/bash
@@ -118,7 +114,6 @@ $ cat /usr/local/apache2/htdocs/index.html
 
 #### 컨테이너를 tar 파일로 출력  
 실행 중인 docker 컨테이너를 tar 파일로 저장하는 방법도 있다.  
-
 ```bash
 #일단 컨테이너를 실행한다
 $ docker run --name new_apache2 -d httpd:2.4
@@ -126,5 +121,37 @@ $ docker container export new_apache2 -o httpd.tar
 $ ll
 total 143164
 -rw-rw-r--. 1 vagrant vagrant 146595328 Apr  1 21:23 httpd.tar
+
+#tar -tf로 tar 파일 확인한다. 
+$ tar -tf httpd.tar
 ```
 .tar 형식 파일이 저장된 것을 확인 가능하다.  
+이 tar 파일은 컨테이너를 백업한 것과 유사하다. 해당 파일을 이미지로 만들어서 실행한다.  
+```bash
+$ cat httpd.tar | docker image import - test_image:v1.1
+$ docker images
+REPOSITORY    TAG       IMAGE ID       CREATED              SIZE
+test_image    v1.1      55884d1eafbc   About a minute ago   142MB
+```
+tar파일을 표준 출력으로 넘겨서, docker image import를 사용하는 방식이다.  
+만들어진 이미지가 컨테이너로 실행 되는지 확인한다.  
+```bash
+$ docker run -d --name test_image2 test_image:v1.1
+docker: Error response from daemon: No command specified.
+```
+오... 안 된다.  
+
+오류 원인은 컨테이너 실행 시 command를 지정하지 않았기 때문이다.  
+컨테이너 실행 시 httpd 를 띄우는 커맨드를 뒤에 붙여서 확인해보자.  
+```bash
+$ docker run --name test_image2 -d test_image:v1.1 /usr/local/apache2/bin/httpd -DFOREGROUND
+#실행이 되었으면, apache 컨테이너의 ip 정보를 확인해서 접속 가능한지 확인한다
+$ docker continer inspect test_image2 | grep 172
+            "Gateway": "172.17.0.1",
+            "IPAddress": "172.17.0.5",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.5",
+$ curl http://172.17.0.5
+<html><body><h1>It works!</h1></body></html>
+```
+정상적으로 동작하는 것을 확인하였다.  
