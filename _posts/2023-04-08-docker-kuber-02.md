@@ -365,3 +365,7 @@ $ docker run -d -name=mynginx mynginx:latest
 FROM myngix
 ```
 이제 ONBUILD에 정의한 website를 확인 가능하다.  
+
+### 차주에는 ...
+* Docker-compose
+* 쿠버네티스 시작 (VM 이미지는 미리 올라올 예정으로, 예습 필요)  
