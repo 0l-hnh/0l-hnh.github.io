@@ -169,6 +169,7 @@ $ docker image load -i mysql.tar
 ### 06. Docker image 생성 : Dockerfile
 #### 주 사용 명령어  
 
+```Ini
 |커맨드|설명|
 |------|------|
 |FROM "이미지":"태그"|컨테이너의 베이스 이미지를 지정|
@@ -188,6 +189,7 @@ $ docker image load -i mysql.tar
 |EXPOSE "port"|공개 포트 설정|
 |USER "유저명" "UID"|RUN, CMD, ENTRYPOINT 실행 유저 지정|
 |VOLUME \["/path"\]|공유 가능한 볼륨을 마운트|
+```
 
 #### 실습  
 Docker 이미지를 빌드하는 방법으로, Dockerfile을 작성한 뒤 docker build 로 빌드할 수 있다.  
