@@ -303,4 +303,39 @@ Su Mo Tu We Th Fr Sa
 23 24 25 26 27 28 29
 30 31               
 ```
-Dockerfile 내에 ENTRYPOINT ["cal","05","2023"]으로 작성해도 동일한 결과를 얻었을 테지만, 그런 경우에는 docker run 시에 다른 변수를 커맨드로 줄 수 없다.  
+Dockerfile 내에 ENTRYPOINT \["cal","05","2023"\]으로 작성해도 동일한 결과를 얻었을 테지만, 그런 경우에는 docker run 시에 다른 변수를 커맨드로 줄 수 없다.  
+
+ENTRYPOINT 내에 반드시 shell 형식으로 적어줘야 하는 명령어도 존재한다.  
+예를 들어 아래와 같은 경우이다.  
+
+```Ini
+# CentOS 8 Images
+FROM centos:8
+RUN cal
+RUN touch /tmp/test.txt
+RUN touch /var/test2.txt
+
+#ENTRYPOINT ["cal"]
+#CMD ["05","2023"]
+ENTRYPOINT ps -e | head -n 2
+```
+```bash
+$ docker build -t sample .
+[+] Building 0.1s (8/8) FINISHED                                            
+ => [internal] load build definition from Dockerfile                   0.1s
+ => => transferring dockerfile: 256B                                   0.0s
+ => [internal] load .dockerignore                                      0.0s
+ => => transferring context: 2B                                        0.0s
+ => [internal] load metadata for docker.io/library/centos:8            0.0s
+ => [1/4] FROM docker.io/library/centos:8                              0.0s
+ => CACHED [2/4] RUN cal                                               0.0s
+ => CACHED [3/4] RUN touch /tmp/test.txt                               0.0s
+ => CACHED [4/4] RUN touch /var/test2.txt                              0.0s
+ => exporting to image                                                 0.0s
+ => => exporting layers                                                0.0s
+ => => writing image sha256:a6c4a269a1b30c9b1141bb4fc77ab419d2ee12dfd  0.0s
+ => => naming to docker.io/library/sample   
+$ docker run sample
+  PID TTY          TIME CMD
+    1 ?        00:00:00 sh
+```
