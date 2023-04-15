@@ -24,9 +24,10 @@ sitemap:
 Docker(도커), 쿠버네티스 관련 재직자 지원 수업의 세 번째 강의 내용을 정리한다.  
 
 ## 2023-04-15 강의 노트  
-### 07. Docker scratch image 
-[참고를 위한 Docker 공식 사이트](https://hub.docker.com/_/scratch)  
-Scratch Image란 이미지를 최대한 작게 만들기 위해서 사용하는 것이다.  
+### 07. Docker scratch image
+* 이미지를 최대한 작게 만들기 위해 베이스 이미지로 'scratch'를 사용  
+* [참고를 위한 Docker 공식 사이트](https://hub.docker.com/_/scratch)  
+
 scratch 이미지를 사용하는 가장 간단한 Dockerfile 예제는 아래와 같다.  
 ```Ini
 FROM scratch
@@ -132,6 +133,7 @@ myhello       latest    24c9e62ca272   6 minutes ago    2.33MB
 이미지 사이즈를 확인하면, 거의 바이너리 파일 크기만 갖고 있는 아주 작은 이미지인 점을 확인할 수 있다.  
 정적 (static) 바이너리 파일을 빌드하면 컨테이너 내에 필요한 라이브러리를 COPY 하지 않아도 된다.  
 ```bash
+# -static 옵션으로 빌드가 안 될 시, yum install glibc-static 하고 실행한다. 
 $ gcc -static -o hello hello.c 
 $ ldd hello
         not a dynamic executable
@@ -167,6 +169,104 @@ IMAGE          CREATED         CREATED BY                     SIZE      COMMENT
 1dc65c3cefbd   2 minutes ago   CMD ["/hello"]                 0B        buildkit.dockerfile.v0
 <missing>      2 minutes ago   COPY lib64 /lib64 # buildkit   2.32MB    buildkit.dockerfile.v0
 <missing>      2 minutes ago   COPY hello / # buildkit        861kB     buildkit.dockerfile.v0
-```
+```  
 
-#### 
+### 08. Docker Multi-stage build
+* Docker를 빌드할 때 바이너리 파일을 빌드한 다음, 해당 바이너리 파일을 다른 Docker 베이스 이미지를 사용해서 동작시키는 방법
+* 실행 이미지의 크기가 경량화 됨  
+  
+일단 아래와 같은 Dockerfile을 작성해본다.  
+```Ini
+FROM ubuntu:18.04 
+RUN apt-get update
+RUN apt-get install -y gcc
+COPY hello.c /tmp
+WORKDIR /tmp
+RUN gcc -o hello-world hello.c
+CMD ["/tmp/hello-world"]
+```
+해당 Dockerfile은 'single stage' 이다.  
+
+```bash
+$ docker build -t single-stage .
+[+] Building 82.6s (11/11) FINISHED                                                  
+ => [internal] load build definition from Dockerfile                            0.1s
+ => => transferring dockerfile: 251B                                            0.0s
+ => [internal] load .dockerignore                                               0.1s
+ => => transferring context: 106B                                               0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:18.04                 0.4s
+ => [1/6] FROM docker.io/library/ubuntu:18.04@sha256:8aa9c2798215f99544d1ce743  4.2s
+ => => resolve docker.io/library/ubuntu:18.04@sha256:8aa9c2798215f99544d1ce743  0.1s
+ => => sha256:0779371f96205678dbcaa3ef499be2e5f262c8b09aadc11754bf 424B / 424B  0.0s
+ => => sha256:3941d3b032a8168d53508410a67baad120a563df67a79595 2.30kB / 2.30kB  0.0s
+ => => sha256:0c5227665c11379f79e9da3d3e4f1724f9316b87d259ac 25.69MB / 25.69MB  1.4s
+ => => sha256:8aa9c2798215f99544d1ce7439ea9c3a6dfd82de607da1ce 1.33kB / 1.33kB  0.0s
+ => => extracting sha256:0c5227665c11379f79e9da3d3e4f1724f9316b87d259ac0131628  2.4s
+ => [internal] load build context                                               0.1s
+ => => transferring context: 174B                                               0.0s
+ => [2/6] RUN apt-get update                                                   11.6s
+ => [3/6] RUN apt-get install -y gcc                                           62.4s
+ => [4/6] COPY hello.c /tmp                                                     0.4s
+ => [5/6] WORKDIR /tmp                                                          0.2s
+ => [6/6] RUN gcc -o hello-world hello.c                                        1.4s
+ => exporting to image                                                          1.8s
+ => => exporting layers                                                         1.8s
+ => => writing image sha256:11e1548881285049262cd7b5b1c2badf170b9afd1ffbd2a54f  0.0s
+ => => naming to docker.io/library/single-stage     
+$ docker run single-stage
+Hello My Container! 
+```
+내부에서 hello.c 가 잘 컴파일 되어서, 정상적으로 해당 파일이 실행되었음을 볼 수 있다.  
+```bash
+$ docker images
+REPOSITORY     TAG       IMAGE ID       CREATED              SIZE
+single-stage   latest    11e154888128   About a minute ago   220MB
+```
+생성된 이미지의 총 크기는 220 MB 이다.  
+컴파일러 크기까지 포함되어서 사이즈가 커진 것이다.  
+
+이제 베이스 이미지를 두 개 사용해서 빌드하는, multi-stage 빌드를 해 본다.  
+```Ini
+FROM ubuntu:18.04 AS build-image
+RUN apt-get update
+RUN apt-get install -y gcc
+COPY hello.c /tmp
+WORKDIR /tmp
+RUN gcc -o hello-world hello.c
+
+FROM ubuntu:18.04 
+COPY --from=build-image /tmp/hello-world .
+CMD ["./hello-world"]
+```
+빌드 이미지를 쓰면, 빌드 이미지에서 만든 것을 두 번째 이미지로 복사한다.  
+따라서 컴파일러가 설치되지 않은 ubuntu 이미지에서 바이너리 파일을 실행하는 것과 같은 효과를 보여서, 이미지 사이즈가 작아진다.  
+빌드하여 확인 해 본다.  
+```bash
+$  docker build -t multi-stage .
+[+] Building 1.3s (12/12) FINISHED                                                   
+ => [internal] load build definition from Dockerfile                            0.0s
+ => => transferring dockerfile: 324B                                            0.0s
+ => [internal] load .dockerignore                                               0.1s
+ => => transferring context: 106B                                               0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:18.04                 0.9s
+ => CACHED [build-image 1/6] FROM docker.io/library/ubuntu:18.04@sha256:8aa9c2  0.0s
+ => [internal] load build context                                               0.0s
+ => => transferring context: 174B                                               0.0s
+ => CACHED [build-image 2/6] RUN apt-get update                                 0.0s
+ => CACHED [build-image 3/6] RUN apt-get install -y gcc                         0.0s
+ => CACHED [build-image 4/6] COPY hello.c /tmp                                  0.0s
+ => CACHED [build-image 5/6] WORKDIR /tmp                                       0.0s
+ => CACHED [build-image 6/6] RUN gcc -o hello-world hello.c                     0.0s
+ => [stage-1 2/2] COPY --from=build-image /tmp/hello-world .                    0.1s
+ => exporting to image                                                          0.1s
+ => => exporting layers                                                         0.1s
+ => => writing image sha256:66c3ba5557ae0cfaef2add249d5756fb4bd0b1f4f8462e1ab6  0.0s
+ => => naming to docker.io/library/multi-stage         
+$ docker run multi-stage
+Hello My Container!
+$ docker images
+REPOSITORY     TAG       IMAGE ID       CREATED          SIZE
+multi-stage    latest    66c3ba5557ae   27 seconds ago   63.2MB
+single-stage   latest    11e154888128   9 minutes ago    220MB
+```
+동일하게 '.c' 파일이 컴파일 되는 것을 알 수 있으며, multi-stage로 빌드했을 때 이미지 크기가 약 70% 줄어든 것을 확인 가능하다.  
