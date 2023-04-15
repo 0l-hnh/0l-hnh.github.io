@@ -270,3 +270,45 @@ multi-stage    latest    66c3ba5557ae   27 seconds ago   63.2MB
 single-stage   latest    11e154888128   9 minutes ago    220MB
 ```
 동일하게 '.c' 파일이 컴파일 되는 것을 알 수 있으며, multi-stage로 빌드했을 때 이미지 크기가 약 70% 줄어든 것을 확인 가능하다.  
+
+### 09. Docker Registry 
+* docker image를 올려두는 곳이며, public과 private 이 각각 있음  
+
+#### Docker hub에 업로드
+1. tag 설정
+docker tag 이미지이름:tag docker registry url/이미지이름:tag
+2. 비보안(insecure) 레지스트리추가
+```bash
+$ vi /etc/docker/daemon.json
+#daemon.json 수정
+{"insecure-registries": ["registry.example.com:5000"] }
+$ systemctl restart docker
+```
+3. docker image upload
+```bash
+$ docker tag hello-world registry.example.com:5000/hello-world
+$ docker images
+$ docker push registry.example.com:5000/hello-world
+```
+registry 를 사용하여서 해당 이미지를 docker hub 본인 계정에 업로드 하였다.  
+
+#### Registry 서버를 사용
+1. registry server 에 docker 설치
+```bash
+$ sudo hostnamectl set-hostname registry.example.com
+```
+docker 가 설치안되어 있으면 먼저 docker 부터 설치한다.  
+```bash
+$ sudo yum install -y yum-utils
+$ sudo yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
+$ sudo yum install docker-ce docker-ce-cli containerd.io
+$ sudo systemctl start docker
+```
+2. docker registry 이미지 다운로드 
+```bash
+$ docker pull registry:latest
+```
+3. registry container 실행  
+```
+$ docker run -d --name registry -p 5000:5000 --restart=alwyas registry
+```
