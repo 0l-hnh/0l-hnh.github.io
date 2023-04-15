@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] Docker 강의 정리 (3)"
+title:  "[Docker] Docker 강의 정리 (3) - Docker 이미지, 쿠버네티스"
 date:   2023-04-15 10:10:00 +0900
 
 categories:
@@ -43,7 +43,7 @@ int main()
         return 0;
 }
 ```  
-이제 gcc 로 hello.c 를 컴파일 한 뒤 해당 바이너리 파일을 내부로 copy 하여 docker build 한다.  
+gcc 로 hello.c 를 컴파일 한 뒤 해당 바이너리 파일을 내부로 copy 하여 docker build 한다.  
 ```bash
 $ gcc -o hello hello.c
 $ file hello
@@ -75,7 +75,8 @@ $ ldd hello
         /lib64/ld-linux-x86-64.so.2 (0x00007f482ccac000)
 ```
 컨테이너 내에서 로컬 커널에 있는 라이브러리를 참조하지 못 해서 발생하는 문제로 추정된다.  
-위의 '.so' 파일들을 docker build 시 사용할 수 있도록 build 위치에 복사한 뒤 다시 진행한다.  
+파일을 정적으로 컴파일 하면 해당 이슈가 없지만, 동적으로 컴파일 했기 때문에 이런 문제가 발생한다.  
+해당 이슈가 맞는지 확인하기 위하여, 위의 '.so' 파일들을 docker build 시 사용할 수 있도록 build 위치에 복사한 뒤 다시 진행한다.  
 ```bash
 $ cp /lib64/ld-linux-x86-64.so.2 lib64/.
 $ cp /lib64/libc.so.6 lib64/.
@@ -122,5 +123,50 @@ $ docker run myhello
 Hello My Container! 
 ```
 정상적으로 실행 되는 것을 확인했다.  
+scratch 이미지는 정말 아무 것도 없는 이미지로, 필요한 바이너리 파일만 담아서 빠르게 실행할 수 있게 한다.  
+```bash
+$ docker images
+REPOSITORY    TAG       IMAGE ID       CREATED          SIZE
+myhello       latest    24c9e62ca272   6 minutes ago    2.33MB
+```
+이미지 사이즈를 확인하면, 거의 바이너리 파일 크기만 갖고 있는 아주 작은 이미지인 점을 확인할 수 있다.  
+정적 (static) 바이너리 파일을 빌드하면 컨테이너 내에 필요한 라이브러리를 COPY 하지 않아도 된다.  
+```bash
+$ gcc -static -o hello hello.c 
+$ ldd hello
+        not a dynamic executable
+$ docker build -t myhello:static .
+[+] Building 0.6s (6/6) FINISHED                            
+ => [internal] load build definition from Dockerfile   0.0s
+ => => transferring dockerfile: 155B                   0.0s
+ => [internal] load .dockerignore                      0.1s
+ => => transferring context: 2B                        0.0s
+ => [internal] load build context                      0.1s
+ => => transferring context: 861.82kB                  0.0s
+ => [1/2] COPY hello /                                 0.1s
+ => [2/2] COPY lib64 /lib64                            0.2s
+ => exporting to image                                 0.2s
+ => => exporting layers                                0.1s
+ => => writing image sha256:1dc65c3cefbd29db13207e733  0.0s
+ => => naming to docker.io/library/myhello:static      0.0s
+$  docker run myhello:static
+Hello My Container! 
+```
+잘 실행이 되었다.  
+```bash
+$ docker images
+REPOSITORY    TAG       IMAGE ID       CREATED          SIZE
+myhello       static    1dc65c3cefbd   55 seconds ago   3.18MB
+myhello       latest    24c9e62ca272   14 minutes ago   2.33MB
+```
+이미지 사이즈를 확인하면 위와 같다.  
+docker image history 명령어로 빌드 과정에서 늘어난 이미지 사이즈를 확인할 수 있다.  
+```bash
+$ docker image history myhello:static
+IMAGE          CREATED         CREATED BY                     SIZE      COMMENT
+1dc65c3cefbd   2 minutes ago   CMD ["/hello"]                 0B        buildkit.dockerfile.v0
+<missing>      2 minutes ago   COPY lib64 /lib64 # buildkit   2.32MB    buildkit.dockerfile.v0
+<missing>      2 minutes ago   COPY hello / # buildkit        861kB     buildkit.dockerfile.v0
+```
 
 #### 
