@@ -314,7 +314,10 @@ $ docker run -d --name registry -p 5000:5000 --restart=alwyas registry
 ```
 
 ### 10. Docker-compose
+[참조용 공식 문서](https://docs.docker.com/compose/compose-file/compose-file-v3/)  
+
 '.yaml' 형식 파일을 작성하여 여러 개의 컨테이너를 한 번에 실행할 수 있다.  
+build 에는 build context와 Dockerfile 위치를 줄 수 있으며, ip와 volume 등을 지정할 수 있다.  
 ```Ini
 version: '3.9'
 
@@ -358,3 +361,9 @@ Attaching to 230415_2-myapche-1, 230415_2-mydb-1
 230415_2-myapche-1  | AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.30.0.10. Set the 'ServerName' directive globally to suppress this message
 (...)
 ```
+docker-compose로 실행 되는 것을 알 수 있다.  
+docker-compose에서는 ip를 설정하지 않아도 괜찮다.  
+docker-compose가 잘 올라가면 db 컨테이너와 웹 컨테이너가 연결되며, 바로 조회할 수 있을 것이다.  
+
+### 10. 쿠버네티스 설치
+Vagrant Box와 설치 스크립트를 사용하여 쿠버네티스 실습 환경을 구축한다.  
