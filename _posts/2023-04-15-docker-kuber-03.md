@@ -80,5 +80,47 @@ $ ldd hello
 $ cp /lib64/ld-linux-x86-64.so.2 lib64/.
 $ cp /lib64/libc.so.6 lib64/.
 ```
+Dockerfile은 아래와 같이 수정한다.
+```Ini
+FROM scratch
+COPY hello /
+COPY lib64 /lib64
+CMD ["/hello"]
+```
+이제 실행한다.  
+```bash
+$ docker build -t myhello .
+[+] Building 0.4s (6/6) FINISHED                                                     
+ => [internal] load build definition from Dockerfile                            0.1s
+ => => transferring dockerfile: 150B                                            0.0s
+ => [internal] load .dockerignore                                               0.0s
+ => => transferring context: 2B                                                 0.0s
+ => [internal] load build context                                               0.1s
+ => => transferring context: 2.32MB                                             0.1s
+ => CACHED [1/2] COPY hello /                                                   0.0s
+ => [2/2] COPY lib64 /                                                          0.1s
+ => exporting to image                                                          0.1s
+ => => exporting layers                                                         0.1s
+ => => writing image sha256:1431f69860154ff5c4809e172914ee7a1ecb354f9484ef7ef0  0.0s
+ => => naming to docker.io/library/myhello                                      0.0s
+[vagrant@serverx 230415]$ vi Dockerfile 
+[vagrant@serverx 230415]$ docker build -t myhello .
+[+] Building 0.4s (6/6) FINISHED                                                     
+ => [internal] load build definition from Dockerfile                            0.1s
+ => => transferring dockerfile: 155B                                            0.0s
+ => [internal] load .dockerignore                                               0.1s
+ => => transferring context: 2B                                                 0.0s
+ => [internal] load build context                                               0.0s
+ => => transferring context: 372B                                               0.0s
+ => CACHED [1/2] COPY hello /                                                   0.0s
+ => [2/2] COPY lib64 /lib64                                                     0.1s
+ => exporting to image                                                          0.1s
+ => => exporting layers                                                         0.1s
+ => => writing image sha256:24c9e62ca272cf7fc099e7b9ebe973b68a756d5b5c933dd689  0.0s
+ => => naming to docker.io/library/myhello
+$ docker run myhello
+Hello My Container! 
+```
+정상적으로 실행 되는 것을 확인했다.  
 
 #### 
