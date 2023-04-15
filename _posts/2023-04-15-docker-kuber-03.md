@@ -312,3 +312,49 @@ $ docker pull registry:latest
 ```
 $ docker run -d --name registry -p 5000:5000 --restart=alwyas registry
 ```
+
+### 10. Docker-compose
+'.yaml' 형식 파일을 작성하여 여러 개의 컨테이너를 한 번에 실행할 수 있다.  
+```Ini
+version: '3.9'
+
+networks:
+  webapps: 
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.20.0.0/16        
+
+services:
+  php:
+    build: ./docker/php
+    volumes: 
+      - ./html:/var/www/html
+      - ./logs:/var/log/apache2/
+    ports:
+      - '8000:80'
+    networks:
+      webapps:
+        ipv4_address: 172.20.0.99
+    depends_on:
+      - db
+  db:
+    build: ./docker/mysql
+    networks:
+      webapps:
+        ipv4_address: 172.20.0.100 
+
+```
+위의 내용을 'sample.yaml' 로 저장한 후 실행한다.
+```bash
+$ docker compose -f sample.yaml up
+ Container 230415_2-mydb-1  Created
+ Container 230415_2-myapche-1  Created
+Attaching to 230415_2-myapche-1, 230415_2-mydb-1
+230415_2-mydb-1     | 2023-04-15 07:18:02+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 5.7.41-1.el7 started.
+230415_2-mydb-1     | 2023-04-15 07:18:03+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+230415_2-mydb-1     | 2023-04-15 07:18:03+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 5.7.41-1.el7 started.
+230415_2-myapche-1  | AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.30.0.10. Set the 'ServerName' directive globally to suppress this message
+230415_2-myapche-1  | AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.30.0.10. Set the 'ServerName' directive globally to suppress this message
+(...)
+```
