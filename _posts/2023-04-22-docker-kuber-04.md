@@ -626,10 +626,10 @@ It works!
 ```
 같은 pod 안의 apache 서버 결과가 보인다. 같은 pod 안에서는 상호 접속이 가능하다는 사실을 알 수 있다.  
 
-#### Replica Set  
+#### ReplicaSet  
 * Pod의 실행을 항상 동일한 개수로 안정적으로 유지  
   
-'Replica Set'의 yaml 파일을 작성해보자.
+'ReplicaSet'의 yaml 파일을 작성해보자.
 ```yaml
 ---
 apiVersion: apps/v1
@@ -659,5 +659,21 @@ NAME             DESIRED   CURRENT   READY   AGE
 apache-replica   3         3         3       33m
 ```  
 서비스 1개를 쓰더라도 replica를 1개로 두면 안정적인 서비스 운영이 가능하다.  
+명령어로 replica 개수 조절이 가능하다.  
+```bash
+$ kubectl scale --replicas 5 replicaset apache-replica
+$ kubectl get pods
+NAME                   READY   STATUS    RESTARTS   AGE
+apache-pod             1/1     Running   0          156m
+apache-replica-grk6b   1/1     Running   0          46m
+apache-replica-mv9zp   1/1     Running   0          48m
+```  
+replica되는 pod를 완전히 삭제하고 싶다면, scale을 0으로 주거나 set obeject를 삭제한다.  
+```bash
+$ kubectl scale --replicas 0 replicaset apache-replica
+$ kubectl delete replicasets.apps apache-replica 
+replicaset.apps "apache-replica" deleted
+```
+하지만 replica set object는 막상 잘 쓰지 않는다. 그 이유는 deployment가 replica set을 대체할 수 있기 때문이다. 더 정확히 쓰자면, deployment가 replica set을 생성하는 상위 object임과 동시에 롤백 등 더 다양한 기능을 사용할 수 있기 때문에, pod 개수만 유지시켜주는 replica set의 한정된 기능만 필요할 때가 아니라면 굳이 사용할 필요가 없다.  
 
-하지만 replica set object는 막상 잘 쓰지 않는다. 그 이유는 depolyment가 repolica set을 대체할 수 있기 때문이다.  
+#### Deployment  
