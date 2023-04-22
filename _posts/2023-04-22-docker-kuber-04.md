@@ -227,6 +227,7 @@ $ kubectl completion bash > auto.sh
 ```bash
 $ kubectl run myapache --image httpd:latest
 Error from server (AlreadyExists): pods "myapache" already exists 
+# ns로 현재 생성된 namespace를 확인한다.
 $  kubectl get ns
 NAME              STATUS   AGE
 default           Active   2d14h
