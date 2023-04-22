@@ -461,3 +461,11 @@ $ cat /etc/hosts
 ```
 이 경우 http://192.168.14.50:30632 로 접속이 가능하다. 라우팅 테이블로 바로 접속은 못 하지만 외부에 노출된 Node IP를 통해서 데이터 패킷을 보낼 수 있게 된다.  
 한 가지 더, Network Load Balancer를 사용하여서 외부 접속 가능한 External-IP 를 설정할 수 있다. 이 경우는 가능하다는 것을 알아 두도록 한다.  
+
+#### Container 내부
+```bash
+$ kubectl exec -it apache-pod -- /bin/bash
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+root@apache-pod:/usr/local/apache2#
+```
+오... pod의 컨테이너 내부로 접속하였다.
