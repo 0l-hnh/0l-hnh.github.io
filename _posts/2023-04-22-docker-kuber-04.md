@@ -622,4 +622,10 @@ lo        Link encap:Local Loopback
 (alpine)$ curl http://10.244.1.6
 It works!
 ```
-접속이 잘 되었다.  
+접속이 잘 되었다. 이 때 eth0으로 접속이 되는 것은 당연하다. 그런데, 보통 본인 자신에게 loop가 되는 lo의 ip로 접속을 시도하면 무슨 일이 일어날까?  
+```bash
+$ curl http://127.0.0.1
+It works!
+```
+같은 pod 안의 apache 서버 결과가 보인다. 같은 pod 안에서는 상호 접속이 가능하다는 사실을 알 수 있다.  
+
