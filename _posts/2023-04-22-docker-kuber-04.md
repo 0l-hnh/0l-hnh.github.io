@@ -220,7 +220,8 @@ $ echo "source <(kubectl completion bash)" >> ~/.bashrc #자동 완성 스크립
 $ kubectl completion bash > auto.sh
 ```  
 
-#### 주요 오브젝트 : Namespace 개념  
+#### 주요 오브젝트 : Namespace  
+##### Namespace 개념 및 관련 명령어
 쿠버네티스에서 동일 namespace 에 이름이 동일한 pod을 생성하려고 하면 오류가 발생한다.  
 이 때 -n 옵션으로 namespace 를 변경하면 생성할 수 있다.  
 ```bash
@@ -289,7 +290,7 @@ namespace "myns" deleted
 ```  
 추가적으로 kubectx, kubens 를 설치하면 namespace를 쉽게 관리할 수 있다. 필수는 아니다.  
 
-#### 주요 오브젝트 : Namespace Menifest  
+##### Namespace 메니페스트 파일
 '*.yaml' 확장자를 사용하여 메니페스트 파일 작성 시 Namespace를 원하는 방식으로 생성할 수 있다.  
 
 yaml 파일 작성 전에 api 버전을 확인한다. 
@@ -310,4 +311,15 @@ yaml 형식 파일은 대소문자 구분을 하며, 들여쓰기 등도 정확�
 $ kubectl apply -f ns.yaml 
 namespace/testns created
 ```  
-간단한 testns 네임스페이스가 생성되었다.  
+간단한 네임스페이스가 생성되었다.  
+
+'kubens' 등의 패키지를 설치하면 네임스페이스 변경을 명령어 한 줄로 실행 가능하다.  
+```bash
+$ kubens --help
+Usage: 
+                   kubens               : list the namespace 
+                   kubens <NAME>        : change the active namespace 
+                   kubens -c            : show the current namespace
+                   kubens -             : switch to the previous namespace (This option is not work)
+$ kubens testns
+```  
