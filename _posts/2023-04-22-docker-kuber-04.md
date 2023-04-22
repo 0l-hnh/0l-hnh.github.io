@@ -177,4 +177,7 @@ $ ps -ef | grep -w kube-controller-manaer | cat -n
 * kube-scheduler : 생성된 pod를 node에 할당하는 컴포넌트. 가장 최적화 된 node에 pod를 배치하게 됨
 * kube-controller manager : 컨트롤러 프로세스를 실행하고 클러스터의 실제 상태를 원하는 사양으로 조정
 * kube-apiserver : 쿠버네티스 API 로, 외부/내부에서 관리자의 원격 명령을 받을 수 있는 컴포넌트. etcd, scheduler에서 결정된 node 에 신호를 보냄
-* kubelet : 명령어를 받아서 컨테이너 실행하도록 전달 
+* kubelet : docker 엔진 혹은 continaerd 등과 상호작용하여 컨테이너를 실행하며, 제공된 PodSpec 세트를 가져와 해당 컨테이너가 완전히 작동하는지 확인함
+
+쿠버네티스에서 사용하는 개념은 크게 '객체(Object)' 와 '컨트롤러(Controller)' 로 나눌 수 있다.  
+(1) 객체는 사용자가 쿠버네티스에 바라는 상태(desired state)를 의미하며, (2) 컨트롤러는 객체가 원래 설정된 상태를 잘 유지할수있게 관리하는 역할이다.  
