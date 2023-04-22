@@ -183,7 +183,7 @@ $ ps -ef | grep -w kube-controller-manaer | cat -n
 #### yaml 파일
 쿠버네티스 관리 시에는 Menifest 파일이 필수이기 때문에 yaml 파일을 작성할 수 있어야 한다.  
 
-### 15. 쿠버네티스 명령어
+### 15. 쿠버네티스 명령어와 주요 객체
 쿠버네티스에서 사용하는 개념은 크게 '객체(Object)' 와 '컨트롤러(Controller)' 로 나눌 수 있다.  
 (1) 객체는 사용자가 쿠버네티스에 바라는 상태(desired state)를 의미하며, (2) 컨트롤러는 객체가 원래 설정된 상태를 잘 유지할수있게 관리하는 역할이다.  
 
@@ -220,7 +220,7 @@ $ echo "source <(kubectl completion bash)" >> ~/.bashrc #자동 완성 스크립
 $ kubectl completion bash > auto.sh
 ```  
 
-#### 주요 오브젝트 : namespace  
+#### 주요 오브젝트 : Namespace 개념  
 쿠버네티스에서 동일 namespace 에 이름이 동일한 pod을 생성하려고 하면 오류가 발생한다.  
 이 때 -n 옵션으로 namespace 를 변경하면 생성할 수 있다.  
 ```bash
@@ -288,3 +288,6 @@ $ kubectl delete ns myns
 namespace "myns" deleted 
 ```  
 추가적으로 kubectx, kubens 를 설치하면 namespace를 쉽게 관리할 수 있다. 필수는 아니다.  
+
+#### 주요 오브젝트 : Namespace Menifest  
+'*.yaml' 확장자를 사용하여 메니페스트 파일 작성 시 Namespace를 원하는 방식으로 생성할 수 있다.  
