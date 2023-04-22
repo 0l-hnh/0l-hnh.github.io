@@ -322,4 +322,5 @@ Usage:
                    kubens -c            : show the current namespace
                    kubens -             : switch to the previous namespace (This option is not work)
 $ kubens testns
+Context "kubernetes-admin@kubernetes" modified.
 ```  
