@@ -121,7 +121,7 @@ It Works!
 ### 12. 컨테이너 실행을 위한 런타임  
 #### Docker 런타임  
 Docker 런타임의 구성 요소 및 쿠버네티스 1.24부터 docker를 지원하지 않게 된 사유를 알아본다.  
-Docker 런타임은 아래왕 같이 이해할 수 있다.  
+Docker 런타임은 아래와 같이 이해할 수 있다.  
 * docker engine: 도커 이미지를 관리하고 컨테이너 실행을 위해 containerd 데몬과 통신하여 runc 기반으로 컨테이너를 실행  
 * containerd: Docker 에서 OCI spec 을 준수하여 개발한 container runtime high level container run time. 도커레지스트리에서 이미지를 가져오고, 도커 네트워크및 스토리지 관리 그리고 컨테이너 실행을 위해서 저수준 런타임인 runc 를 실행하고 관리 
 * runc : container 를 생성하고 실행하는 low level 런타임, OCI runtime spec 준수  
@@ -139,5 +139,11 @@ Docker는 CRI 표준을 준수하지 못 하기 때문에, 해당 인터페이�
 > kubelet ↔ Dockershim ↔ Docker ↔ containerd → runc  
 
 쿠버네티스는 CRI 표준에 맞지 않는 Docker 를 사용하기 위하여 1.23 버전까지 중간 단계를 거쳐서 runc를 실행하였지만, 1.24부터는 containerd에 CRI 플러그인을 사용하여 컨테이너를 실행하게 되었다.  
+
+![에시이미지](https://i.ibb.co/BPwLYBv/2023-04-22-105639.png)  
+
 단, 그 후 개발된 CRI-dockerd 를 컨테이너 런테임으로 사용하면 계속 docker를 사용할 수 있다.  
 minikube의 경우 CRI-dockerd 를 사용한다.  
+
+#### Podman
+RedHat 에서는 본인들이 개발한 Podman 을 권장한다.  
