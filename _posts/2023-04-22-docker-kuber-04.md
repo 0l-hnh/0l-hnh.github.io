@@ -427,7 +427,7 @@ spec:
     app: myweb
 
 ```
-서비스가 접속하기 위해서는 pod의 label이 필요하다는 사실을 새겨두자.  
+서비스가 접속하기 위해서는 pod의 label이 필요하다는 사실을 새겨두자. (app에 해당 label을 입력한다.)  
 그 뒤 kubectl 명령어로 create 한다.
 ```bash
 $ kubectl create -f myweb-service.yaml
