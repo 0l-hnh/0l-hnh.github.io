@@ -98,6 +98,7 @@ kube-flannel-ds-qr7tp   1/1     Running   0            2d12h
 
 #### pod 생성 
 * 쿠버네티스는 포그라운드, 백그라운드 개념이 없음 (work node 에서 실행되기 때문)  
+
 ```bash
 $ kubectl run myapache --image httpd:2.4
 pod/myapache created
@@ -113,11 +114,11 @@ pod의 ip 는 컨테이너 ip와 동일하다.
 컨테이너 ip가 pod ip를 사용하기 때문에, 해당 ip를 공유한다.  
 ```bash
 $ curl http://10.244.2.2
-<html><body><h1>It works!</h1></body></html>
+It Works!
 ```  
 해당 ip로 접속을 하니 잘 되었다. pod 통신이 되는 것을 확인하였다.  
 
-### 12. 컨테이너를 실행하는 CLI  
+### 12. 컨테이너 실행을 위한 런타임  
 #### Docker 런타임  
 * docker engine: 도커 이미지를 관리하고 컨테이너 실행을 위해 containerd 데몬과 통신하여 runc 기반으로 컨테이너를 실행  
 * containerd: high level container run time. 도커레지스트리에서 이미지를 가져오고, 도커 네트워크및 스토리지 관리 그리고 컨테이너 실행을 위해서 저수준 런타임인 runc 를 실행하고 관리. 플러그인을 통해 CRI 를 준수하므로 kubernetes 런타임으로 사용할 수 있음  
