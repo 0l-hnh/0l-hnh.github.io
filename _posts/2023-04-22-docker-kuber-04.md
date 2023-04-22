@@ -128,10 +128,9 @@ Docker 런타임은 아래와 같이 이해할 수 있다.
 
 런타임 레벨은 (High) containerd -> runc (Low) 이다.  
 
-#### CRI
-* 쿠버네티스에서 만든 API (컨테이너 런타임 인터페이스)  
-* 쿠버네티스가 각 런타임과 상호작용하는 방법을 설명하며, 주어진 컨테이너 런타임이 CRI API를 구현하면 런타임을 원하는대로 선택하여 컨테이너를 생성하고, 실행할 수 있음 (예제 : containerd, CRI-O 등)  
-* CRI-O 는 Redhat, IBM 등이 개발한 쿠버네티스 전용 컨테이너 런타임으로, 컨테이너 생성 및 이미지 빌드 등을 할 수 없고, 실행에 중점을 둠.  
+#### CRI, CRI-O
+* CRI : 쿠버네티스에서 만든 API (컨테이너 런타임 인터페이스). 쿠버네티스가 각 런타임과 상호작용하는 방법을 설명하며, 주어진 컨테이너 런타임이 CRI API를 구현하면 런타임을 원하는대로 선택하여 컨테이너를 생성하고, 실행할 수 있음 (예제 : containerd, CRI-O 등)  
+* CRI-O : Redhat, IBM 등이 개발한 쿠버네티스 전용 컨테이너 런타임으로, 컨테이너 생성 및 이미지 빌드 등을 할 수 없고, 실행에 중점을 둠.  
   
 Docker는 CRI 표준을 준수하지 못 하기 때문에, 해당 인터페이스에 부합하는 Dockershim을 사용해야 kubelet에서 사용할 수 있다.  
 즉, kubelet에서 거쳐야하는 단계가 많다.  
@@ -142,8 +141,5 @@ Docker는 CRI 표준을 준수하지 못 하기 때문에, 해당 인터페이�
 
 ![에시이미지](https://i.ibb.co/BPwLYBv/2023-04-22-105639.png)  
 
-단, 그 후 개발된 CRI-dockerd 를 컨테이너 런테임으로 사용하면 계속 docker를 사용할 수 있다.  
-minikube의 경우 CRI-dockerd 를 사용한다.  
-
-#### Podman
-RedHat 에서는 본인들이 개발한 Podman 을 권장한다.  
+단, 그 후 개발된 CRI-dockerd 를 컨테이너 런테임으로 사용하면 계속 docker를 사용할 수 있다. minikube의 경우 CRI-dockerd 를 사용한다.  
+그 외에 docker 와 유사하게 사용할 수 있는 'podman'도 있다. RedHat 에서는 본인들이 개발한 Podman 사용을 권장한다.  
