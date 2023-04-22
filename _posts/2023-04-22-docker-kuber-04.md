@@ -125,7 +125,7 @@ It Works!
 * runc : container 를 생성하고 실행하는 low level 런타임, OCI runtime spec 준수  
 
 런타임 레벨은 (High) containerd -> runc (Low) 이다.  
-OCI 표준을 준수하면 컨테이너를 실행하는 런타임을 자유롭게 사용할 수 있다.  
+Docker는 CRI 표준을 준수하지 못 하기 때문에, 해당 인터페이스에 부합하는 Dockershim을 사용해야 kubelet에서 사용할 수 있다.  
 
 #### CRI
 * 쿠버네티스에서 만든 API (컨테이너 런타임 인터페이스)  
