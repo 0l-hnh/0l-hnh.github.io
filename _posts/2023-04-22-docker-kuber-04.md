@@ -658,3 +658,6 @@ $ kubectl get replicasets
 NAME             DESIRED   CURRENT   READY   AGE
 apache-replica   3         3         3       33m
 ```  
+서비스 1개를 쓰더라도 replica를 1개로 두면 안정적인 서비스 운영이 가능하다.  
+
+하지만 replica set object는 막상 잘 쓰지 않는다. 그 이유는 depolyment가 repolica set을 대체할 수 있기 때문이다.  
