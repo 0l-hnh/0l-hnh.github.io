@@ -652,4 +652,9 @@ spec:
         ports:
         - containerPort: 80
 ```  
-위의 파일로 create 하면 항상 replica 개수를 3개로 유지한다.  
+위의 파일로 create 하면 항상 replica 개수를 3개로 유지한다. 만약 세개를 삭제 하더라도, 세 개의 Ready 상태인 replica들이 node에 올라간다.  
+```bash
+$ kubectl get replicasets
+NAME             DESIRED   CURRENT   READY   AGE
+apache-replica   3         3         3       33m
+```  
