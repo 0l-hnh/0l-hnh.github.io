@@ -240,4 +240,9 @@ $ kubectl get pods -n kube-public
 NAME       READY   STATUS    RESTARTS   AGE
 myapache   1/1     Running   0          55s
 ```
-namespace로 동일 이름을 가진 pod이 격리되었다.  
+namespace로 동일 이름을 가진 pod이 격리되었다. 이런 방식으로 다양한 권한이 필요한 대규모 프로젝트 등을 관리할 수 있다.  
+
+namespace 를 새로 만들어보자.  
+```bash
+$ 
+```
