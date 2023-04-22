@@ -297,8 +297,17 @@ yaml 파일 작성 전에 api 버전을 확인한다.
 $ kubectl api-resources | grep -w ns
 namespaces                        ns           v1                                     false        Namespace
 ```
-v1이다.  
+v1이다. 해당 api 버전을 사용하여서 Namespace 파일을 작성해본다.   
 ```yaml
-
 apiVersion: v1
-```
+kind: Namespace
+metadata:
+ name: testns 
+
+```  
+yaml 형식 파일은 대소문자 구분을 하며, 들여쓰기 등도 정확히 작성해야 한다. 작성을 마쳤으면 kubectl apply 로 실행한다.  
+```bash
+$ kubectl apply -f ns.yaml 
+namespace/testns created
+```  
+간단한 testns 네임스페이스가 생성되었다.  
