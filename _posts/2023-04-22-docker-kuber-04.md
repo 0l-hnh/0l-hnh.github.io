@@ -400,3 +400,6 @@ Events:
 ##### Container Network Interface (CNI)
 서로 다른 node 에 있는 pod을 연결하기 위해서는 CNI가 필요하다. 쿠버네티스에서 사용할 수 있는 CNI Network Plugin은  Flannel, Calico, Weavenet, NSX 등 여러 종류가 있다.  
 CNI들은 결과적으로 같은 동작을 한다. 약간 차이가 있긴 하다. 에를 들어, calico 는 pod network 를 설정하지만, flannel은 하지 않는다는 차이가 있다.  
+
+##### Service Object  
+외부에서 접속하려면 서비스 오브젝트가 있어야 한다.  
