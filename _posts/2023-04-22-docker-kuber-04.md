@@ -220,7 +220,7 @@ $ echo "source <(kubectl completion bash)" >> ~/.bashrc #자동 완성 스크립
 $ kubectl completion bash > auto.sh
 ```  
 
-#### 주요 오브젝트 : Namespace  
+#### Namespace  
 ##### Namespace 개념 및 관련 명령어
 쿠버네티스에서 동일 namespace 에 이름이 동일한 pod을 생성하려고 하면 오류가 발생한다.  
 이 때 -n 옵션으로 namespace 를 변경하면 생성할 수 있다.  
@@ -290,7 +290,7 @@ namespace "myns" deleted
 ```  
 추가적으로 kubectx, kubens 를 설치하면 namespace를 쉽게 관리할 수 있다. 필수는 아니다.  
 
-##### Namespace 메니페스트 파일
+##### Name/space 메니페스트 파일
 '*.yaml' 확장자를 사용하여 메니페스트 파일 작성 시 Namespace를 원하는 방식으로 생성할 수 있다.  
 
 yaml 파일 작성 전에 api 버전을 확인한다. 
@@ -324,8 +324,15 @@ Usage:
 $ kubens testns
 Context "kubernetes-admin@kubernetes" modified.
 ```  
+default namespace 의 pod 들은 아래와 같이 확인한다. 
+```bash
+$ get pods -o wide -n default
+NAME       READY   STATUS        RESTARTS   AGE     IP           NODE             NOMINATED NODE   READINESS GATES
+myapache   1/1     Terminating   0          4h26m   10.244.2.2   w2.example.com   <none>           <none>
+mynginx    1/1     Terminating   0          3h      10.244.1.2   w1.example.com   <none>           <none>
+```
 
-#### 주요 오브젝트 : Pod  
+#### Pod  
 Pod를 메니페스트 파일로 작성하여 실행하였다.  
 ```yaml
 ---
@@ -348,3 +355,46 @@ spec:
 $ kubectl apply -f apache.yaml
 pod/apache-pod created
 ```
+해당 pod에 문제가 있는지 확인하기 위해서는 kubectl describe 명령어를 사용한다.   
+```bash
+kubectl describe pod/apache-pod
+Name:             apache-pod
+Namespace:        testns
+Priority:         0
+Service Account:  default
+Node:             <none>
+Labels:           app=myweb
+Annotations:      <none>
+Status:           Pending
+IP:               
+IPs:              <none>
+Containers:
+  myweb-container:
+    Image:        httpd:2.4
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-59wlv (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False 
+Volumes:
+  kube-api-access-59wlv:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age                 From               Message
+  ----     ------            ----                ----               -------
+  Warning  FailedScheduling  79s (x17 over 81m)  default-scheduler  0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 node(s) had untolerated taint {node.kubernetes.io/unreachable: }. preemption: 0/3 nodes are available: 3 Preemption is not helpful for scheduling..
+```  
+
+#### CNI
+서로 다른 node 에 있는 pod을 연결하기 위해서는 CNI가 필요하다. 쿠버네티스에서 사용할 수 있는 CNI (Network Plugins)는  Flannel, Calico, Weavenet, NSX 등 여러 종류가 있다.  
