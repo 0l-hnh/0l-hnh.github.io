@@ -98,10 +98,11 @@ kube-flannel-ds-qr7tp   1/1     Running   0            2d12h
 
 #### pod 생성 
 * 쿠버네티스는 포그라운드, 백그라운드 개념이 없음 (work node 에서 실행되기 때문)  
+
 ```bash
 $ kubectl run myapache --image httpd:2.4
 pod/myapache created
-```
+```  
 쿠버네티스 1.14부터 컨테이너 런타임으로 docker 를 지원하지 않는다.  
 따로 지원하는 버전이 나왔기 때문에, 해당 런타임을 사용하면 가능하지만 본 실습에서는 Docker를 사용하지 않는다.  
 ```bash
@@ -114,5 +115,5 @@ pod의 ip 는 컨테이너 ip와 동일하다.
 ```bash
 $ curl http://10.244.2.2
 <html><body><h1>It works!</h1></body></html>
-```
+```  
 해당 ip로 접속을 하니 잘 되었다. pod 통신이 되는 것을 확인하였다.  
