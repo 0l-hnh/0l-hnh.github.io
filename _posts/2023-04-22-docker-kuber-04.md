@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] Docker 강의 정리 (4) - 쿠버네티스 개념, CRI, 세팅"
+title:  "[Docker] Docker 강의 정리 (4) - 쿠버네티스 개념, CRI, 세팅 및 주요 오브젝트"
 date:   2023-04-15 10:10:00 +0900
 
 categories:
@@ -465,7 +465,6 @@ $ cat /etc/hosts
 #### Container 내부
 ```bash
 $ kubectl exec -it apache-pod -- /bin/bash
-kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 root@apache-pod:/usr/local/apache2#
 ```
-오... pod의 컨테이너 내부로 접속하였다.
+오... pod의 컨테이너 내부로 접속 되었다. 멋지다. 이제 work node 에서 실행되는 어플리케이션을 중단하지 않고, master에서 바로 수정이 가능하다. 이를테면 index.html 파일을 수정할 수 있다.  
