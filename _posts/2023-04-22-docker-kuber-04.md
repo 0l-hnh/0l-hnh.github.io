@@ -677,3 +677,7 @@ replicaset.apps "apache-replica" deleted
 하지만 replica set object는 막상 잘 쓰지 않는다. 그 이유는 deployment가 replica set을 대체할 수 있기 때문이다. 더 정확히 쓰자면, deployment가 replica set을 생성하는 상위 object임과 동시에 롤백 등 더 다양한 기능을 사용할 수 있기 때문에, pod 개수만 유지시켜주는 replica set의 한정된 기능만 필요할 때가 아니라면 굳이 사용할 필요가 없다.  
 
 #### Deployment  
+yaml 파일 작성 후 실행한다. 상세한 내용은 다음 이 시간에...
+
+### 차주에는...
+쿠버네티스 Deployment의 Roll-in 업데이트 등
