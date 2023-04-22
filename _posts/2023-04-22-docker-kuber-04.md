@@ -326,7 +326,7 @@ Context "kubernetes-admin@kubernetes" modified.
 ```  
 default namespace 의 pod 들은 아래와 같이 확인한다. 
 ```bash
-$ get pods -o wide -n default
+$ kubectl get pods -o wide -n default
 NAME       READY   STATUS        RESTARTS   AGE     IP           NODE             NOMINATED NODE   READINESS GATES
 myapache   1/1     Terminating   0          4h26m   10.244.2.2   w2.example.com   <none>           <none>
 mynginx    1/1     Terminating   0          3h      10.244.1.2   w1.example.com   <none>           <none>
@@ -396,10 +396,45 @@ Events:
   ----     ------            ----                ----               -------
   Warning  FailedScheduling  79s (x17 over 81m)  default-scheduler  0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 node(s) had untolerated taint {node.kubernetes.io/unreachable: }. preemption: 0/3 nodes are available: 3 Preemption is not helpful for scheduling..
 ```  
+Pod를 실행하려고 하다가 계속 Pending 상태에서 넘어가지 않으며, 스케쥴링에 실패했다.  
+worknode 의 가용 CPU 가 부족한 경우 해당 오류가 발생할 수 있다. 모든 pod를 삭제하고, work node로 사용하던 VM을 재기동한 뒤 원하는 pod를 다시 올려서 해결하였다.  
+```bash
+$ kubectl delete pods --all --grace-period=0 --force
+$ kubectl create -f apache.yaml
+$ kubectl get pod -o wide --show-labels
+NAME         READY   STATUS    RESTARTS   AGE   IP           NODE             NOMINATED NODE   READINESS GATES   LABELS
+apache-pod   1/1     Running   0          15m   10.244.2.3   w2.example.com   
+$ curl 10.244.2.3
+It works!
+```  
 
 ##### Container Network Interface (CNI)
 서로 다른 node 에 있는 pod을 연결하기 위해서는 CNI가 필요하다. 쿠버네티스에서 사용할 수 있는 CNI Network Plugin은  Flannel, Calico, Weavenet, NSX 등 여러 종류가 있다.  
 CNI들은 결과적으로 같은 동작을 한다. 약간 차이가 있긴 하다. 에를 들어, calico 는 pod network 를 설정하지만, flannel은 하지 않는다는 차이가 있다.  
 
-##### Service Object  
-외부에서 접속하려면 서비스 오브젝트가 있어야 한다.  
+#### Service Object  
+외부에서 쿠버네티스가 생성한 pod에 접속하려면 서비스 오브젝트가 있어야 한다. 서비스 오브젝트에 대한 메니페스트 yaml 파일을 아래와 같이 작성해 본다.  
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myweb-service
+spec:
+  ports:
+  - port: 8001
+    targetPort : 80
+  selector:
+    app: myweb
+
+```
+그 뒤 kubectl 명령어로 create 한다.
+```bash
+$ kubectl create -f myweb-service.yaml
+service/myweb-service created
+$ kubectl get svc
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP    29m
+myweb-service   ClusterIP   10.105.77.228   <none>        8001/TCP   15m
+$ curl http://10.105.77.228:8001
+It works!
+```
