@@ -244,5 +244,16 @@ namespace로 동일 이름을 가진 pod이 격리되었다. 이런 방식으로
 
 namespace 를 새로 만들어보자.  
 ```bash
-$ 
-```
+$ kubectl create namespace myns
+namespace/myns created
+$ kubectl get ns
+NAME              STATUS   AGE
+default           Active   2d15h
+kube-flannel      Active   2d15h
+kube-node-lease   Active   2d15h
+kube-public       Active   2d15h
+kube-system       Active   2d15h
+myns              Active   17s
+```  
+성공적으로 생성이 되었다.  
+
