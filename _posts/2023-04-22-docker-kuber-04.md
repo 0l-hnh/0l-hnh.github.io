@@ -324,3 +324,6 @@ Usage:
 $ kubens testns
 Context "kubernetes-admin@kubernetes" modified.
 ```  
+
+#### 주요 오브젝트 : Pod  
+Pod를 메니페스트 파일로 작성하여 실행하였다.  
