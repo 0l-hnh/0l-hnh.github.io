@@ -462,10 +462,164 @@ $ cat /etc/hosts
 ```
 이 경우 http://192.168.14.50:30632 로 접속이 가능하다. 라우팅 테이블로 바로 접속은 못 하지만 외부에 노출된 Node IP를 통해서 데이터 패킷을 보낼 수 있게 된다.  
 한 가지 더, Network Load Balancer를 사용하여서 외부 접속 가능한 External-IP 를 설정할 수 있다. 이 경우는 가능하다는 것을 알아 두도록 한다.  
+동일한 방식으로 서비스 객체를 통해 여러 개의 pod에 외부 웹페이지로 접속할 수 있다.  
+```bash
+$ kubectl get pod --show-labels
+NAME         READY   STATUS    RESTARTS   AGE     LABELS
+apache-pod   1/1     Running   0          78m     app=myweb
+nginx-pod    1/1     Running   0          35m     app=mynginx
+nginx-pod2   1/1     Running   0          3m13s   app=mynginx
+nginx-pod3   1/1     Running   0          2m40s   app=mynginx
+```
+또, 위와 같이 같은 label을 가진 pod를 여러 대 실행한다면 round-robin 방식으로 패킷 전송이 된다. 위 상태에서 nginx-pod2, 3의 index.html 내용을 바꾼 뒤 서비스에 접속하면 변경된 내용이 번갈아 뜬다.  
 
-#### Container 내부
+#### Container 내부 접속
 ```bash
 $ kubectl exec -it apache-pod -- /bin/bash
 root@apache-pod:/usr/local/apache2#
 ```
 오... pod의 컨테이너 내부로 접속 되었다. 멋지다. 이제 work node 에서 실행되는 어플리케이션을 중단하지 않고, master에서 바로 수정이 가능하다. 이를테면 index.html 파일을 수정할 수 있다.  
+
+#### Multi Container Pod
+간단한 multi-container pod를 작성하고 실행해보자.  
+```yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test
+spec:
+  containers:
+  - name: first
+    image: httpd:2.4
+  - name: second
+    image: alpine:latest
+    command: ["/bin/sleep", "3600s"]
+
+```
+apache 하나, alpine 하나다.  
+```bash
+$ kubectl apply -f multi-container.yaml
+pod/test created
+$ kubectl get pods
+NAME         READY   STATUS    RESTARTS   AGE
+apache-pod   1/1     Running   0          85m
+test         2/2     Running   0          27s
+$ kubectl describe pod test
+Name:             test
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             w1.example.com/192.168.14.51
+Start Time:       Sat, 22 Apr 2023 16:58:05 +0900
+Labels:           <none>
+Annotations:      <none>
+Status:           Running
+IP:               10.244.1.6
+IPs:
+  IP:  10.244.1.6
+Containers:
+  first:
+    Container ID:   containerd://96f5c57454904e824df14c0e3215a54da7f889300ab3bcb6a21399417322223c
+    Image:          httpd:2.4
+    Image ID:       docker.io/library/httpd@sha256:a182ef2350699f04b8f8e736747104eb273e255e818cd55b6d7aa50a1490ed0c
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 22 Apr 2023 16:58:08 +0900
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-kzfth (ro)
+  second:
+    Container ID:  containerd://09c35c26844e2a8cfb41a39405d66e6a18f17655b163e03146e87371b772181f
+    Image:         alpine:latest
+    Image ID:      docker.io/library/alpine@sha256:124c7d2707904eea7431fffe91522a01e5a861a624ee31d03372cc1d138a3126
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      /bin/sleep
+      3600s
+    State:          Running
+      Started:      Sat, 22 Apr 2023 16:58:12 +0900
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-kzfth (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-kzfth:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  4m18s  default-scheduler  Successfully assigned default/test to w1.example.com
+  Normal  Pulling    4m17s  kubelet            Pulling image "httpd:2.4"
+  Normal  Pulled     4m15s  kubelet            Successfully pulled image "httpd:2.4" in 1.488389819s (1.488397759s including waiting)
+  Normal  Created    4m15s  kubelet            Created container first
+  Normal  Started    4m15s  kubelet            Started container first
+  Normal  Pulling    4m15s  kubelet            Pulling image "alpine:latest"
+  Normal  Pulled     4m11s  kubelet            Successfully pulled image "alpine:latest" in 4.393641963s (4.393647423s including waiting)
+  Normal  Created    4m11s  kubelet            Created container second
+  Normal  Started    4m11s  kubelet            Started container second
+$ kubectl exec -it test -- /bin/bash
+(apache)$ ifconfig 
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1450
+        inet 10.244.1.6  netmask 255.255.255.0  broadcast 10.244.1.255
+        inet6 fe80::3c33:33ff:fe7e:c10  prefixlen 64  scopeid 0x20<link>
+        ether 3e:33:33:7e:0c:10  txqueuelen 0  (Ethernet)
+        RX packets 780  bytes 8942110 (8.5 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 571  bytes 33172 (32.3 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0 
+```
+'READY'에 보이는 2/2가 2개 중 2개의 컨테이너의 상태를 의미한다.  생성된 'test'의 apache 컨테이너에 접속한 결과, pod 생성이 잘 되었고 첫 번째 컨테이너가 pod 와 ip가 동일하다는 사실을 확인할 수 있었다. 
+두 번째 컨테이너인 alpine에도 접속 해본다.  
+```bash
+$ exec -it test -c second-- /bin/sh
+(alpine)$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 3E:33:33:7E:0C:10  
+          inet addr:10.244.1.6  Bcast:10.244.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::3c33:33ff:fe7e:c10/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1450  Metric:1
+          RX packets:781 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:572 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:8942180 (8.5 MiB)  TX bytes:33242 (32.4 KiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+(alpine)$ curl http://10.244.1.6
+It works!
+```
+접속이 잘 되었다.  
