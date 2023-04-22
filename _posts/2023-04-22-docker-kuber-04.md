@@ -431,6 +431,7 @@ spec:
 ```bash
 $ kubectl create -f myweb-service.yaml
 service/myweb-service created
+$ kubectl apply -f myweb-service.yaml
 $ kubectl get svc
 NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP    29m
@@ -438,3 +439,25 @@ myweb-service   ClusterIP   10.105.77.228   <none>        8001/TCP   15m
 $ curl http://10.105.77.228:8001
 It works!
 ```
+서비스가 생성되고, IP로 접속이 된다는 사실을 알 수 있다.  
+Cluster 안에서 직접 접속하는 것이 아니라, 외부를 거쳐서 접속할 수 있도록 Node IP 를 생성하려 한다.  
+쿠버네티스의 경우 TYPE을 서비스 실행 중 변경할 수 있다. kubectl edit svc {service} 로 편집한다.  
+```bash
+$ kubectl edit service myweb-service 
+service/myweb-service edited
+$ kubectl get svc
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP          34m
+myweb-service   NodePort    10.105.77.228   <none>        8001:30632/TCP   21m
+```
+NodePort 타입으로 변경되었다. NodePort 타입이면 윈도우 (외부)에서 접속할 수 있다. Node IP (클러스터의 IP)를 사용하고, Port 30632번을 사용하면 웹 페이지가 뜨는 것을 확인 가능하다.  
+```bash
+$ cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+:1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.14.50   m.example.com      m
+192.168.14.51   w1.example.com     w1
+192.168.14.52   w2.example.com     w2
+```
+이 경우 http://192.168.14.50:30632 로 접속이 가능하다. 라우팅 테이블로 바로 접속은 못 하지만 외부에 노출된 Node IP를 통해서 데이터 패킷을 보낼 수 있게 된다.  
+한 가지 더, Network Load Balancer를 사용하여서 외부 접속 가능한 External-IP 를 설정할 수 있다. 이 경우는 가능하다ㅑ는 것을 알아 두도록 한다.  
