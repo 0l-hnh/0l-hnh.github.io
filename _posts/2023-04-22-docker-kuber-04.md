@@ -95,3 +95,4 @@ kube-flannel-ds-qr7tp   1/1     Running   0            2d12h
 ```
 
 #### pod 생성 
+* 쿠버네티스는 포그라운드, 백그라운드 개념이 없음 (work node 에서 실행되기 때문)
