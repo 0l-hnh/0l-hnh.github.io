@@ -304,7 +304,6 @@ apiVersion: v1
 kind: Namespace
 metadata:
  name: testns 
-
 ```  
 yaml 형식 파일은 대소문자 구분을 하며, 들여쓰기 등도 정확히 작성해야 한다. 작성을 마쳤으면 kubectl apply 로 실행한다.  
 ```bash
@@ -425,7 +424,6 @@ spec:
     targetPort : 80
   selector:
     app: myweb
-
 ```
 서비스가 접속하기 위해서는 pod의 label이 필요하다는 사실을 새겨두자. (app에 해당 label을 입력한다.)  
 그 뒤 kubectl 명령어로 create 한다.
@@ -495,7 +493,6 @@ spec:
   - name: second
     image: alpine:latest
     command: ["/bin/sleep", "3600s"]
-
 ```
 apache 하나, alpine 하나다.  
 ```bash
@@ -654,6 +651,5 @@ spec:
         image: httpd:2.4
         ports:
         - containerPort: 80
-
 ```  
 위의 파일로 create 하면 항상 replica 개수를 3개로 유지한다.  
