@@ -285,6 +285,6 @@ No resources found in myns namespace.
 namespace 를 삭제하고 싶을 때에는 delete를 사용한다.  
 ```bash
 $ kubectl delete ns myns
-namespace "myns" deleted
+namespace "myns" deleted 
 ```  
 추가적으로 kubectx, kubens 를 설치하면 namespace를 쉽게 관리할 수 있다. 필수는 아니다.  
