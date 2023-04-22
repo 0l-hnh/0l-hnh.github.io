@@ -254,6 +254,36 @@ kube-node-lease   Active   2d15h
 kube-public       Active   2d15h
 kube-system       Active   2d15h
 myns              Active   17s
+$ kubectl config set-context --current --namespace myns
+Context "kubernetes-admin@kubernetes" modified.
+$ kubectl config view 
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: DATA+OMITTED
+    server: https://192.168.14.50:6443
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    namespace: myns
+    user: kubernetes-admin
+  name: kubernetes-admin@kubernetes
+current-context: kubernetes-admin@kubernetes
+kind: Config
+preferences: {}
+users:
+- name: kubernetes-admin
+  user:
+    client-certificate-data: DATA+OMITTED
+    client-key-data: DATA+OMITTED
+$ kubectl get pods
+No resources found in myns namespace.
 ```  
-성공적으로 생성이 되었다.  
-
+성공적으로 생성이 되었고, 현재 namespace를 신규 생성한 namespace로 변경하였다. 신규 namespace로 생성된 pod는 없기 때문에, get pod 시에는 No resource 를 출력한다.  
+namespace 를 삭제하고 싶을 때에는 delete를 사용한다.  
+```bash
+$ kubectl delete ns myns
+namespace "myns" deleted
+```  
+추가적으로 kubectx, kubens 를 설치하면 namespace를 쉽게 관리할 수 있다. 필수는 아니다.  
