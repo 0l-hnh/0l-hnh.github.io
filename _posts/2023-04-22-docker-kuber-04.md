@@ -632,3 +632,28 @@ It works!
 #### Replica Set  
 * Pod의 실행을 항상 동일한 개수로 안정적으로 유지  
   
+'Replica Set'의 yaml 파일을 작성해보자.
+```yaml
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: apache-replica
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apache-replica-test
+  template:
+    metadata:
+      labels:
+        app: apache-replica-test
+    spec:
+      containers:
+      - name: myweb-container2
+        image: httpd:2.4
+        ports:
+        - containerPort: 80
+
+```  
+위의 파일로 create 하면 항상 replica 개수를 3개로 유지한다.  
