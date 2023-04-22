@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] Docker 강의 정리 (4) - 쿠버네티스"
+title:  "[Docker] Docker 강의 정리 (4) - 쿠버네티스 개념, CRI, 세팅"
 date:   2023-04-15 10:10:00 +0900
 
 categories:
@@ -151,3 +151,30 @@ $ curl http://10.244.2.2
 It Works!
 ```  
 해당 ip로 접속을 하니 잘 되었다. pod 통신이 되는 것을 확인하였다.  
+apache가 실행된 상황에서 nginx를 하나 더 올려본다.  
+```bash
+$ kubectl run mynginx --image nginx:latest
+$ kubectl get pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE   IP           NODE             NOMINATED NODE   READINESS GATES
+myapache   1/1     Running   0          86m   10.244.2.2   w2.example.com   <none>           <none>
+mynginx    1/1     Running   0          43s   10.244.1.2   w1.example.com   <none>           <none>
+```  
+pods가 두 개 노드로 분배되었다.  
+
+#### etcd, 스케쥴러, controller
+쿠버네티스의 중요 컴포넌트들을 살펴본다.  
+```bash
+$ ps -ef | grep -w etcd | cat -n
+     1  root        7284    7111  3 09:27 ?        00:05:01 etcd --advertise-client-urls=https://192.168.14.50:2379 --cert-file=/etc/kubernetes/pki/etcd/server.crt --client-cert-auth=true --data-dir=/var/lib/etcd --experimental-initial-corrupt-check=true --experimental-watch-progress-notify-interval=5s --initial-advertise-peer-urls=https://192.168.14.50:2380 --initial-cluster=m.example.com=https://192.168.14.50:2380 --key-file=/etc/kubernetes/pki/etcd/server.key --listen-client-urls=https://127.0.0.1:2379,https://192.168.14.50:2379 --listen-metrics-urls=http://127.0.0.1:2381 --listen-peer-urls=https://192.168.14.50:2380 --name=m.example.com --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt --peer-client-cert-auth=true --peer-key-file=/etc/kubernetes/pki/etcd/peer.key --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt --snapshot-count=10000 --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+     2  root        7319    7152  7 09:27 ?        00:09:15 kube-apiserver --advertise-address=192.168.14.50 --allow-privileged=true --authorization-mode=Node,RBAC --client-ca-file=/etc/kubernetes/pki/ca.crt --enable-admission-plugins=NodeRestriction --enable-bootstrap-token-auth=true --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key --requestheader-allowed-names=front-proxy-client --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6443 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/etc/kubernetes/pki/sa.pub --service-account-signing-key-file=/etc/kubernetes/pki/sa.key --service-cluster-ip-range=10.96.0.0/12 --tls-cert-file=/etc/kubernetes/pki/apiserver.crt --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
+$ ps -ef | grep -w kube-sched | cat -n
+     1  vagrant    43783   12848  0 11:37 pts/9    00:00:00 grep --color=auto -w kube-sched
+$ ps -ef | grep -w kube-controller-manaer | cat -n
+     1  vagrant    44014   12848  0 11:38 pts/9    00:00:00 grep --color=auto -w kube-controller-manaer
+```  
+
+* etcd : 모든 클러스터 데이터를 저장하는 고가용성 키-값 저장소. node의 상태 (ex : pod의 실행 상태, 개수 등) 기록. 일종의 db 역할
+* kube-scheduler : 생성된 pod를 node에 할당하는 컴포넌트. 가장 최적화 된 node에 pod를 배치하게 됨
+* kube-controller manager : 컨트롤러 프로세스를 실행하고 클러스터의 실제 상태를 원하는 사양으로 조정
+* kube-apiserver : 쿠버네티스 API 로, 외부/내부에서 관리자의 원격 명령을 받을 수 있는 컴포넌트. etcd, scheduler에서 결정된 node 에 신호를 보냄
+* kubelet : 명령어를 받아서 컨테이너 실행하도록 전달 
