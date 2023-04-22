@@ -31,7 +31,8 @@ Vagarntfile 은 ruby 문법을 따르기 때문에, 해당 언어를 알고 있�
 #### 실습을 위한 VM 설정  
 * master node ip 충돌이 나지 않게 ip 잘 설정  
 * master node 의 크기는 cpu 개수가 2개 이상
-* master node 의 경우, RAM 이 2 GB 이상 필수
+* master node 의 경우, RAM 이 2 GB 이상 필수  
+
 ```bash
 $ vagrant status
 Current machine states:
