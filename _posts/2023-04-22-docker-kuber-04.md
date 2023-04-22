@@ -180,13 +180,12 @@ $ ps -ef | grep -w kube-controller-manaer | cat -n
 * kube-apiserver : 쿠버네티스 API 로, 외부/내부에서 관리자의 원격 명령을 받을 수 있는 컴포넌트. etcd, scheduler에서 결정된 node 에 신호를 보냄
 * kubelet : docker 엔진 혹은 continaerd 등과 상호작용하여 컨테이너를 실행하며, 제공된 PodSpec 세트를 가져와 해당 컨테이너가 완전히 작동하는지 확인함
 
+#### yaml 파일
+쿠버네티스 관리 시에는 Menifest 파일이 필수이기 때문에 yaml 파일을 작성할 수 있어야 한다.  
 
 ### 15. 쿠버네티스 명령어
 쿠버네티스에서 사용하는 개념은 크게 '객체(Object)' 와 '컨트롤러(Controller)' 로 나눌 수 있다.  
 (1) 객체는 사용자가 쿠버네티스에 바라는 상태(desired state)를 의미하며, (2) 컨트롤러는 객체가 원래 설정된 상태를 잘 유지할수있게 관리하는 역할이다.  
-
-#### yaml 파일
-쿠버네티스 관리 시에는 Menifest 파일이 필수이기 때문에 yaml 파일을 작성할 수 있어야 한다.  
 
 #### kubectl 실행 권한
 kubectl 명령어가 root라도 바로 실행되지 않는다면, 권한 문제일 수도 있다.  
