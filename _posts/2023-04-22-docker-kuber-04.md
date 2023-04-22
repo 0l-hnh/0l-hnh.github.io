@@ -333,6 +333,7 @@ mynginx    1/1     Terminating   0          3h      10.244.1.2   w1.example.com 
 ```
 
 #### Pod  
+##### Pod 메니페스트 파일 
 Pod를 메니페스트 파일로 작성하여 실행하였다.  
 ```yaml
 ---
@@ -396,5 +397,6 @@ Events:
   Warning  FailedScheduling  79s (x17 over 81m)  default-scheduler  0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 node(s) had untolerated taint {node.kubernetes.io/unreachable: }. preemption: 0/3 nodes are available: 3 Preemption is not helpful for scheduling..
 ```  
 
-#### CNI
+##### CNI
 서로 다른 node 에 있는 pod을 연결하기 위해서는 CNI가 필요하다. 쿠버네티스에서 사용할 수 있는 CNI (Network Plugins)는  Flannel, Calico, Weavenet, NSX 등 여러 종류가 있다.  
+CNI들은 결과적으로 같은 동작을 한다. 약간 차이가 있긴 하다. 에를 들어, calico 는 pod network 를 설정하지만, flannel은 하지 않는다는 차이가 있다.  
