@@ -291,3 +291,14 @@ namespace "myns" deleted
 
 #### 주요 오브젝트 : Namespace Menifest  
 '*.yaml' 확장자를 사용하여 메니페스트 파일 작성 시 Namespace를 원하는 방식으로 생성할 수 있다.  
+
+yaml 파일 작성 전에 api 버전을 확인한다. 
+```bash
+$ kubectl api-resources | grep -w ns
+namespaces                        ns           v1                                     false        Namespace
+```
+v1이다.  
+```yaml
+
+apiVersion: v1
+```
