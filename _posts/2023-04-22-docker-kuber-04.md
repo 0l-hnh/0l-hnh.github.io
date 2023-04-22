@@ -163,10 +163,7 @@ mynginx    1/1     Running   0          43s   10.244.1.2   w1.example.com   <non
 pods가 두 개 노드로 분배되었다.  
 
 #### etcd, 스케쥴러, controller
-쿠버네티스에서 사용하는 개념은 크게 '객체(Object)' 와 '컨트롤러(Controller)' 로 나눌 수 있다.  
-(1) 객체는 사용자가 쿠버네티스에 바라는 상태(desired state)를 의미하며, (2) 컨트롤러는 객체가 원래 설정된 상태를 잘 유지할수있게 관리하는 역할이다.  
-
-이 중 kubectl api-resources로 쿠버네티스의 중요 컴포넌트들을 살펴본다.  
+쿠버네티스의 중요 컴포넌트들을 살펴본다.  
 ```bash
 $ ps -ef | grep -w etcd | cat -n
      1  root        7284    7111  3 09:27 ?        00:05:01 etcd --advertise-client-urls=https://192.168.14.50:2379 --cert-file=/etc/kubernetes/pki/etcd/server.crt --client-cert-auth=true --data-dir=/var/lib/etcd --experimental-initial-corrupt-check=true --experimental-watch-progress-notify-interval=5s --initial-advertise-peer-urls=https://192.168.14.50:2380 --initial-cluster=m.example.com=https://192.168.14.50:2380 --key-file=/etc/kubernetes/pki/etcd/server.key --listen-client-urls=https://127.0.0.1:2379,https://192.168.14.50:2379 --listen-metrics-urls=http://127.0.0.1:2381 --listen-peer-urls=https://192.168.14.50:2380 --name=m.example.com --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt --peer-client-cert-auth=true --peer-key-file=/etc/kubernetes/pki/etcd/peer.key --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt --snapshot-count=10000 --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
@@ -185,9 +182,13 @@ $ ps -ef | grep -w kube-controller-manaer | cat -n
 
 
 ### 15. 쿠버네티스 명령어
-직접적인 명령어는 아니지만, 쿠버네티스 관리 시에는 Menifest 파일이 필수이기 때문에 yaml 파일을 작성할 수 있어야 한다.  
+쿠버네티스에서 사용하는 개념은 크게 '객체(Object)' 와 '컨트롤러(Controller)' 로 나눌 수 있다.  
+(1) 객체는 사용자가 쿠버네티스에 바라는 상태(desired state)를 의미하며, (2) 컨트롤러는 객체가 원래 설정된 상태를 잘 유지할수있게 관리하는 역할이다.  
 
-#### 계정 및 권한
+#### yaml 파일
+쿠버네티스 관리 시에는 Menifest 파일이 필수이기 때문에 yaml 파일을 작성할 수 있어야 한다.  
+
+#### kubectl 실행 권한
 kubectl 명령어가 root라도 바로 실행되지 않는다면, 권한 문제일 수도 있다.  
 ```bash
 $ sudo su
@@ -219,3 +220,24 @@ $ echo "source <(kubectl completion bash)" >> ~/.bashrc #자동 완성 스크립
 ```bash
 $ kubectl completion bash > auto.sh
 ```  
+
+#### 주요 오브젝트 : namespace  
+쿠버네티스에서 동일 namespace 에 이름이 동일한 pod을 생성하려고 하면 오류가 발생한다.  
+이 때 -n 옵션으로 namespace 를 변경하면 생성할 수 있다.  
+```bash
+$ kubectl run myapache --image httpd:latest
+Error from server (AlreadyExists): pods "myapache" already exists 
+$  kubectl get ns
+NAME              STATUS   AGE
+default           Active   2d14h
+kube-flannel      Active   2d14h
+kube-node-lease   Active   2d14h
+kube-public       Active   2d14h
+kube-system       Active   2d14h
+$ kubectl run myapache --image httpd:latest -n kube-public
+pod/myapache created
+$ kubectl get pods -n kube-public 
+NAME       READY   STATUS    RESTARTS   AGE
+myapache   1/1     Running   0          55s
+```
+namespace로 동일 이름을 가진 pod이 격리되었다.  
