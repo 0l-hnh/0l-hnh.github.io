@@ -327,3 +327,24 @@ Context "kubernetes-admin@kubernetes" modified.
 
 #### 주요 오브젝트 : Pod  
 Pod를 메니페스트 파일로 작성하여 실행하였다.  
+```yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: apache-pod
+  labels:
+    app: myweb
+    #labels is not essential
+spec:
+  containers:
+  - name: myweb-container
+    image: httpd:2.4
+    ports:
+    - containerPort: 80
+```
+위와 같이 apache에 대한 yaml 파일을 작성하고 아래와 같이 실행한다.  
+```bash
+$ kubectl apply -f apache.yaml
+pod/apache-pod created
+```
