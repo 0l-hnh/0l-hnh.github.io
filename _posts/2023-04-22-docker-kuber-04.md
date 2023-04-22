@@ -61,7 +61,6 @@ Ready 상태라면 준비가 일단 된 것이다.
 쿠버네티스의 가장 기본적인 단위는 'pods' 이다.  
 
 > 파드(Pod) 는 쿠버네티스에서 생성하고 관리할 수 있는 배포 가능한 가장 작은 컴퓨팅 단위이다. 파드 (고래 떼(pod of whales)나 콩꼬투리(pea pod)와 마찬가지로)는 하나 이상의 컨테이너의 그룹이다. 이 그룹은 스토리지 및 네트워크를 공유하고, 해당 컨테이너를 구동하는 방식에 대한 명세를 갖는다.  
-
 출처 : [쿠버네티스 공식 문서](https://kubernetes.io/ko/docs/concepts/workloads/pods/)  
 
 ```bash
@@ -96,4 +95,22 @@ kube-flannel-ds-qr7tp   1/1     Running   0            2d12h
 ```
 
 #### pod 생성 
-* 쿠버네티스는 포그라운드, 백그라운드 개념이 없음 (work node 에서 실행되기 때문)
+* 쿠버네티스는 포그라운드, 백그라운드 개념이 없음 (work node 에서 실행되기 때문)  
+```bash
+$ kubectl run myapache --image httpd:2.4
+pod/myapache created
+```
+쿠버네티스 1.14부터 컨테이너 런타임으로 docker 를 지원하지 않는다.  
+따로 지원하는 버전이 나왔기 때문에, 해당 런타임을 사용하면 가능하지만 본 실습에서는 Docker를 사용하지 않는다.  
+```bash
+$ kubectl get pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE     IP           NODE             NOMINATED NODE   READINESS GATES
+myapache   1/1     Running   0          2m22s   10.244.2.2   w2.example.com   <none>           <none>
+```  
+pod의 ip 는 컨테이너 ip와 동일하다. 
+컨테이너 ip가 pod ip를 사용하기 때문에, 해당 ip를 공유한다.  
+```bash
+$ curl http://10.244.2.2
+<html><body><h1>It works!</h1></body></html>
+```
+해당 ip로 접속을 하니 잘 되었다. pod 통신이 되는 것을 확인하였다.  
