@@ -163,7 +163,10 @@ mynginx    1/1     Running   0          43s   10.244.1.2   w1.example.com   <non
 pods가 두 개 노드로 분배되었다.  
 
 #### etcd, 스케쥴러, controller
-쿠버네티스의 중요 컴포넌트들을 살펴본다.  
+쿠버네티스에서 사용하는 개념은 크게 '객체(Object)' 와 '컨트롤러(Controller)' 로 나눌 수 있다.  
+(1) 객체는 사용자가 쿠버네티스에 바라는 상태(desired state)를 의미하며, (2) 컨트롤러는 객체가 원래 설정된 상태를 잘 유지할수있게 관리하는 역할이다.  
+
+이 중 kubectl api-resources로 쿠버네티스의 중요 컴포넌트들을 살펴본다.  
 ```bash
 $ ps -ef | grep -w etcd | cat -n
      1  root        7284    7111  3 09:27 ?        00:05:01 etcd --advertise-client-urls=https://192.168.14.50:2379 --cert-file=/etc/kubernetes/pki/etcd/server.crt --client-cert-auth=true --data-dir=/var/lib/etcd --experimental-initial-corrupt-check=true --experimental-watch-progress-notify-interval=5s --initial-advertise-peer-urls=https://192.168.14.50:2380 --initial-cluster=m.example.com=https://192.168.14.50:2380 --key-file=/etc/kubernetes/pki/etcd/server.key --listen-client-urls=https://127.0.0.1:2379,https://192.168.14.50:2379 --listen-metrics-urls=http://127.0.0.1:2381 --listen-peer-urls=https://192.168.14.50:2380 --name=m.example.com --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt --peer-client-cert-auth=true --peer-key-file=/etc/kubernetes/pki/etcd/peer.key --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt --snapshot-count=10000 --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
@@ -180,8 +183,39 @@ $ ps -ef | grep -w kube-controller-manaer | cat -n
 * kube-apiserver : 쿠버네티스 API 로, 외부/내부에서 관리자의 원격 명령을 받을 수 있는 컴포넌트. etcd, scheduler에서 결정된 node 에 신호를 보냄
 * kubelet : docker 엔진 혹은 continaerd 등과 상호작용하여 컨테이너를 실행하며, 제공된 PodSpec 세트를 가져와 해당 컨테이너가 완전히 작동하는지 확인함
 
-쿠버네티스에서 사용하는 개념은 크게 '객체(Object)' 와 '컨트롤러(Controller)' 로 나눌 수 있다.  
-(1) 객체는 사용자가 쿠버네티스에 바라는 상태(desired state)를 의미하며, (2) 컨트롤러는 객체가 원래 설정된 상태를 잘 유지할수있게 관리하는 역할이다.  
 
 ### 15. 쿠버네티스 명령어
-쿠버네티스 관리 시에는 Menifest 파일이 필수이기 때문에 yaml을 작성할 수 있어야 한다.  
+직접적인 명령어는 아니지만, 쿠버네티스 관리 시에는 Menifest 파일이 필수이기 때문에 yaml 파일을 작성할 수 있어야 한다.  
+
+#### 계정 및 권한
+kubectl 명령어가 root라도 바로 실행되지 않는다면, 권한 문제일 수도 있다.  
+```bash
+$ sudo su
+(root)$ kubectl get nodes
+E0422 12:02:20.048102   50984 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+```  
+/etc/kubernetes/admin.conf 파일로 쿠버네티스 관리자 권한을 인증받아야 하는데, root 는 해당 파일이 PATH에 없기 때문이다. 해당 위치를 export 하면 아래와 같이 kubectl 사용이 가능하다.  
+```bash
+(root)$ export KUBECONFIG=/etc/kubernetes/admin.conf 
+(root)$ echo $KUBECONFIG
+/etc/kubernetes/admin.conf
+$ kubectl get nodes
+NAME             STATUS   ROLES           AGE     VERSION
+m.example.com    Ready    control-plane   2d14h   v1.27.1
+w1.example.com   Ready    <none>          2d14h   v1.27.1
+w2.example.com   Ready    <none>          2d14h   v1.27.1
+```  
+단, 해당 방법으로도 일반 유저는 admin.conf를 참조할 수 없기 때문에 명령어 사용이 불가하다.  
+```bash
+# configuration for authorization to use kubecli command
+$ mkdir -p $HOME/.kube
+$ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+$ sudo chown vagrant:vagrant  /home/vagrant/.kube/config
+$ echo "source <(kubectl completion bash)" >> ~/.bashrc #자동 완성 스크립트 만드는 부분
+```
+위와 같이 파일로 만들어서 유저 홈 디렉토리의 .bashrc 에 복사하면 사용 가능하다.  
+자동 완성 기능을 사용하기 위해 만들어진 쉘 스크립트를 확인하고 싶다면, 아래와 같이 파일을 생성하여 볼 수 있다.  
+```bash
+$ kubectl completion bash > auto.sh
+```  
