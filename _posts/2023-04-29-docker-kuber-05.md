@@ -122,5 +122,64 @@ deployment.apps "nginx" deleted
 $ kubectl get replicasets.apps
 No resources found in default namespace.
 ```  
+현재 실행 중인 nginx 의 ip를 확인한다.  
+```bash 
+$ ip a s cni0
+5: cni0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP group default qlen 1000
+    link/ether f6:54:9c:67:3e:4a brd ff:ff:ff:ff:ff:ff
+    inet 10.244.0.1/24 brd 10.244.0.255 scope global cni0
+       valid_lft forever preferred_lft forever
+```
 
-#### Deployment - Roll-in update  
+#### Deployment - Update
+쿠버네티스에서 지원하는 무중단 배포 방식에 대하여 알아본다.  
+
+예시로, 현재 사용하는 nginx 버전을 1.14에서 1.15로 업데이트 해보자. yaml 파일을 수정한 다음 다시 apply 하면 이미 생성된 객체가 수정된다.  
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.15
+        ports:
+        - containerPort: 80
+```  
+image의 태그를 수정하였다. 이제 적용한 다음 pods들의 상태를 watch로 관찰한다.  
+```bash
+$ kubectl apply -f deploy.yaml 
+deployment.apps/nginx configured
+$ watch -n 1 -d kubectl get pods
+```  
+실행 중인 pods 전체가 중단되는 것이 아니라 일부만 중단되고, 새로운 pods들이 생기는 것을 확인 가능하다. 이 동작에 대해 아래와 같은 설명을 찾을 수 있다.  
+
+> 디플로이먼트는 업데이트되는 동안 일정한 수의 파드만 중단되도록 보장한다. 기본적으로 적어도 의도한 파드 수의 75% 이상이 동작하도록 보장한다(최대 25% 불가). 
+출처 : [쿠버네티스 공식 페이지](https://kubernetes.io/ko/docs/concepts/workloads/controllers/deployment/)  
+
+이 설정은 depolyment.app의 설정에서도 찾을 수 있다.  
+```bash
+$ kubectl describe deployments.apps
+Name:                   nginx
+Namespace:              default
+CreationTimestamp:      Sat, 29 Apr 2023 10:16:28 +0900
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 4
+Selector:               app=nginx
+Replicas:               10 desired | 10 updated | 10 total | 10 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+(후략)
+```  
