@@ -302,3 +302,53 @@ spec:
     hostPath:
       path: /var/tmp/web_docs
 ```  
+```bash
+$ kubectl get pods 
+NAME           READY   STATUS    RESTARTS   AGE
+myapache-new   1/1     Running   0          6m32s
+```
+잘 실행 되었다. 
+```bash
+$ kubectl exec -it myapache-new -- /bin/bash
+(apache)$ df -ha
+Filesystem                   Size  Used Avail Use% Mounted on
+overlay                      125G  4.2G  121G   4% /
+proc                            0     0     0    - /proc
+tmpfs                         64M     0   64M   0% /dev
+devpts                          0     0     0    - /dev/pts
+mqueue                          0     0     0    - /dev/mqueue
+sysfs                           0     0     0    - /sys
+tmpfs                        909M     0  909M   0% /sys/fs/cgroup
+cgroup                          0     0     0    - /sys/fs/cgroup/systemd
+cgroup                          0     0     0    - /sys/fs/cgroup/net_cls,net_prio
+cgroup                          0     0     0    - /sys/fs/cgroup/perf_event
+cgroup                          0     0     0    - /sys/fs/cgroup/cpu,cpuacct
+cgroup                          0     0     0    - /sys/fs/cgroup/rdma
+cgroup                          0     0     0    - /sys/fs/cgroup/hugetlb
+cgroup                          0     0     0    - /sys/fs/cgroup/pids
+cgroup                          0     0     0    - /sys/fs/cgroup/freezer
+cgroup                          0     0     0    - /sys/fs/cgroup/devices
+cgroup                          0     0     0    - /sys/fs/cgroup/memory
+cgroup                          0     0     0    - /sys/fs/cgroup/cpuset
+cgroup                          0     0     0    - /sys/fs/cgroup/blkio
+/dev/mapper/cl_centos8-root  125G  4.2G  121G   4% /etc/hosts
+/dev/mapper/cl_centos8-root  125G  4.2G  121G   4% /dev/termination-log
+/dev/mapper/cl_centos8-root  125G  4.2G  121G   4% /etc/hostname
+/dev/mapper/cl_centos8-root  125G  4.2G  121G   4% /etc/resolv.conf
+shm                           64M     0   64M   0% /dev/shm
+/dev/mapper/cl_centos8-root  125G  4.2G  121G   4% /usr/local/apache2/htdocs
+tmpfs                        1.7G   12K  1.7G   1% /run/secrets/kubernetes.io/serviceaccount
+proc                            0     0     0    - /proc/bus
+proc                            0     0     0    - /proc/fs
+proc                            0     0     0    - /proc/irq
+proc                            0     0     0    - /proc/sys
+proc                            0     0     0    - /proc/sysrq-trigger
+tmpfs                        909M     0  909M   0% /proc/acpi
+tmpfs                         64M     0   64M   0% /proc/kcore
+tmpfs                         64M     0   64M   0% /proc/keys
+tmpfs                         64M     0   64M   0% /proc/timer_list
+tmpfs                         64M     0   64M   0% /proc/sched_debug
+tmpfs                        909M     0  909M   0% /proc/scsi
+tmpfs                        909M     0  909M   0% /sys/firmware
+```
+해당 pod로 접속하여 host의 디렉토리가 잘 마운트 되어 있는 것을 확인하였다.  
