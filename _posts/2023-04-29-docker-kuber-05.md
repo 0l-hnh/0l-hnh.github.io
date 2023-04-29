@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] Docker 강의 정리 (5)"
+title:  "[Docker] Docker 강의 정리 (5) - Deployment, Storage, Application 배포"
 date:   2023-04-29 10:10:00 +0900
 
 categories:
