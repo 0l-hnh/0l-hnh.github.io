@@ -287,7 +287,6 @@ metadata:
   name: myapache-new
   labels:
     app: myweb-svc
-    #labels is not essential
 spec:
   containers:
   - name: myapache-container
@@ -390,7 +389,6 @@ metadata:
   name: myapache-new4
   labels:
     app: myweb-svc
-    #labels is not essential
 spec:
   containers:
   - name: myapache-container
