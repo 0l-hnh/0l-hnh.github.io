@@ -271,5 +271,34 @@ $ cat /etc/hosts
 오늘 수업에서는 스토리지의 기본적인 사용 방식을 이해하고, 몇 가지 타입을 알아보도록 한다.  
 
 ##### hostPath
-host에 있는 디스크를 사용한다.  
+* 호스트 노드의 파일시스템에 있는 파일이나 디렉토리에 직접 마운트 
+* pod이 삭제되어도 볼륨의 데이터는 유지
+* 기존 pod 삭제되고 새로운 pod가 스케쥴링 될 때, 만약 기존 노드에 pod가 스케쥴링 되지 않으면 기존 노드 데이터는 사용할 수 없음
+* 공식에서는 **보안상 hostPath 사용하지 않는 것**을 권장  
+
 ![hostPath 이미지](https://i.ibb.co/kSJQYJq/2023-04-29-115352.png)  
+
+아래와 같이 예시 yaml 파일을 작성한다.  
+```bash
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapache-new
+  labels:
+    app: myweb-svc
+    #labels is not essential
+spec:
+  containers:
+  - name: myapache-container
+    image: httpd:2.4
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: hostpath-volume
+      mountPath: /usr/local/apache2/htdocs
+  volumes:
+  - name: hostpath-volume
+    hostPath:
+      path: /var/tmp/web_docs
+```  
