@@ -166,7 +166,7 @@ $ watch -n 1 -d kubectl get pods
 실행 중인 pods 전체가 중단되는 것이 아니라 일부만 중단되고, 새로운 pods들이 생기는 것을 확인 가능하다. 이 동작에 대해 아래와 같은 설명을 찾을 수 있다.  
 
 > 디플로이먼트는 업데이트되는 동안 일정한 수의 파드만 중단되도록 보장한다. 기본적으로 적어도 의도한 파드 수의 75% 이상이 동작하도록 보장한다(최대 25% 불가).  
-- 출처 : [쿠버네티스 공식 페이지](https://kubernetes.io/ko/docs/concepts/workloads/controllers/deployment/)  
+-출처 : [쿠버네티스 공식 페이지](https://kubernetes.io/ko/docs/concepts/workloads/controllers/deployment/)  
 
 이 설정은 depolyment.app의 설정에서도 찾을 수 있다.  
 ```bash
