@@ -555,6 +555,7 @@ CLI에서 접근 모드에 대한 약어는 아래와 같다.
 작업 순서 : (백엔드) DB -> 서버 -> wp (프론트엔드)
 1. PersistentVolume (pv) 생성
   - 작성 시 storage에 대해 알 필요 있음 (용량, path, type 등)
+  - 생성된 pv는 namespace와 상관 없이 다 보임 
 2. PersistentVolumeClaim (pvc) 생성해서 pv 요청 
   - pv type에 대해 몰라도, 용량만 작성하여서 사용 가능함
 ```bash
@@ -566,4 +567,3 @@ $ kubectl get pvc
 NAME                STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 mysql-volumeclaim   Bound    pv1      1Gi        RWO                           9s
 ```
-3. 
