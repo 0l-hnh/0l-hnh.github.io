@@ -482,3 +482,44 @@ cat: /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernet
    * pv : 영구 스토리지 볼륨을 설정하기 위한 객체
    * pvc : 영구 스토리지 볼륨 사용을 요청하기 위한 객체
 * 리눅스에서 가장 많이 쓰는 타입 (aws에서는 efs를 사용하는데, nfs와 굉장히 유사하기 때문에 nfs를 이해하면 잘 사용할 수 있음)  
+
+기존 Docker VM 으로 사용했던 192.168.51.10 VM을 nfs 서버로 사용한다.  
+VM끼리 통신이 가능하도록 ip 대역과 LAN 카드를 설정한 다음, nfs 서버로 사용할 docker 서버에 아래와 같이 nfs-utils을 설치하고 방화벽을 내린다. 
+```bash
+(dkr)$ sudo yum -y install nfs-utils
+(dkr)$ sudo firewall-cmd --list-alls
+```  
+그리고 node 에 /var/nfs_storage 를 마운트하여 사용하고, pod의 컨테이너는 생성될 때 node의 로컬 디렉토리에 마운트한다.  
+nfs-server를 설치한 VM의 /etc/exports에 아래와 같이 연결할 서버를 설정한다.  
+```bash
+(dkr)$ mkdir /var/nfs_storage
+(dkr)$ cat exports
+/var/nfs_storage *(rw,sync,insecure,no_root_squash)
+#권한 설정을 잘못 하면 연결이 되지 않으니 주의한다. 
+$ exportfs -a
+```  
+이제 nfs 서버로 쓸 VM 세팅이 완료되었다. work node와 master node에도 nfs-utils를 설치하고, 명령어를 사용하여 mount 한다. mount 시에는 root로 명령어를 실행해야 편하다.  
+```bash
+$ sudo yum -y install nfs-utils
+$ mount -t nfs -o rw 192.168.51.10:/var/nfs_storage /mnt/nfs
+```
+이제 nfs 서버에 /mnt/nfs 디렉토리가 마운트 되었다. 이제 pod의 yaml 파일 내에 nfs-volume 설정을 해 본다.  
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nfs-storage-test
+spec:
+  containers:
+  - name: nfs-container-test
+    image: centos:7
+    command: ['sh', '-c', '/usr/bin/sleep 3600s']
+    volumeMounts:
+    - name: nfs-volume
+      mountPath: /mnt
+  volumes:
+  - name: nfs-volume
+    nfs:
+      path: /var/nfs_storage
+      server: 192.168.51.10
+```  
