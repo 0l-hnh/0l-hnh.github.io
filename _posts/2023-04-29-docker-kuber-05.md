@@ -475,3 +475,5 @@ $ ssh w1
 cat: /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernetes.io~empty-dir/redis-storage/redis.txt: No such file or directory
 ```  
 해당 pod을 삭제 후 동일 node 내 디렉토리에 접근을 시도하니, 오류가 발생했다.  
+/tmp 와 /var/tmp 에 위치한 파일은 일정 기간 동안 접근하지 않으면 삭제되니 주의해야 한다.  
+
