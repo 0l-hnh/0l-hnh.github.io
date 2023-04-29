@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "[Docker] Docker 강의 정리 (4) - 쿠버네티스 개념, CRI, 세팅 및 주요 오브젝트"
-date:   2023-04-15 10:10:00 +0900
+date:   2023-04-22 10:10:00 +0900
 
 categories:
   - docker
