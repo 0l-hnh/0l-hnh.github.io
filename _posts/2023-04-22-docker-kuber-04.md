@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] Docker 강의 정리 (4) - 쿠버네티스 개념, CRI, 세팅 및 주요 오브젝트"
+title:  "[Docker] Docker 강의 정리 (4) - 쿠버네티스 개념, CRI, 세팅 및 주요 개념"
 date:   2023-04-22 10:10:00 +0900
 
 categories:
@@ -183,7 +183,7 @@ $ ps -ef | grep -w kube-controller-manaer | cat -n
 #### yaml 파일
 쿠버네티스 관리 시에는 Menifest 파일이 필수이기 때문에 yaml 파일을 작성할 수 있어야 한다.  
 
-### 15. 쿠버네티스 명령어와 주요 객체
+### 15. 쿠버네티스 명령어와 주요 개념 (1)
 쿠버네티스에서 사용하는 개념은 크게 '객체(Object)' 와 '컨트롤러(Controller)' 로 나눌 수 있다.  
 (1) 객체는 사용자가 쿠버네티스에 바라는 상태(desired state)를 의미하며, (2) 컨트롤러는 객체가 원래 설정된 상태를 잘 유지할수있게 관리하는 역할이다.  
 
