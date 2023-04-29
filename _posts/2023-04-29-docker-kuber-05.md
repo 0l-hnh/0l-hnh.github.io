@@ -448,5 +448,8 @@ spec:
 ```bash
 $ kubectl apply -f redis.yaml 
 pod/redis created
+$ kubectl get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE   IP            NODE             NOMINATED NODE   READINESS GATES
+redis   1/1     Running   0          86s   10.244.1.60   w1.example.com   <none>           <none>
 ```  
-잘 실행 된다.
+w1.example.com 에 pod이 배치 되었다. 해당 node 에 스토리지가 배정 되었을 것이다.  
