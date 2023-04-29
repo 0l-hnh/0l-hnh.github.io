@@ -186,7 +186,7 @@ RollingUpdateStrategy:  25% max unavailable, 25% max surge
 
 yaml 파일이 아니라 명령어로도 업데이트를 진행할 수 있다.  
 업데이트 후 kubectl get pods -o wide 로 ip 정보를 알아내어 curl로 접속 시도한 뒤, 버전을 확인한다.  
-```
+```bash
 $ kubectl set image deployment nginx nginx=nginx:1.16
 deployment.apps/nginx image updated
 $ kubectl get pods -o wide
@@ -279,7 +279,7 @@ $ cat /etc/hosts
 ![hostPath 이미지](https://i.ibb.co/kSJQYJq/2023-04-29-115352.png)  
 
 아래와 같이 예시 yaml 파일을 작성한다.  
-```bash
+```yaml
 ---
 apiVersion: v1
 kind: Pod
