@@ -266,7 +266,7 @@ $ cat /etc/hosts
 또, 이 방법 외에 'LoadBalacer' type으로 버전을 설정할 수가 있다. 이 type은 클라우드 환경인 gcp나 aws 에서는 기본으로 지원하지만 Local PC인 경우 오픈소스 프로젝트인 metal lb 를 설치해야 한다.  
 
 #### Storage Setting   
-쿠버네티스의 영구 볼륨 설정에 대해 알아본다.  
+쿠버네티스의 볼륨 설정에 대해 알아본다.  
 [쿠버네티스 공식 페이지](https://kubernetes.io/ko/docs/concepts/storage/) 에서 다양한 종류의 스토리지를 확인할 수 있다.  
 오늘 수업에서는 스토리지의 기본적인 사용 방식을 이해하고, 몇 가지 타입을 알아보도록 한다.  
 
@@ -477,3 +477,6 @@ cat: /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernet
 해당 pod을 삭제 후 동일 node 내 디렉토리에 접근을 시도하니, 오류가 발생했다.  
 /tmp 와 /var/tmp 에 위치한 파일은 일정 기간 동안 접근하지 않으면 삭제되니 주의해야 한다.  
 
+##### nfs
+*  nfs 공유 디렉토리의 마운트 포인트를 지정하거나, pv 혹은 pvc 객체를 사용여 관리  
+*  리눅스에서 가장 많이 쓰는 타입 (aws에서는 efs를 사용하는데, nfs와 굉장히 유사하기 때문에 nfs를 이해하면 잘 사용할 수 있음)  
