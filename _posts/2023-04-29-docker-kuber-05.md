@@ -552,6 +552,8 @@ CLI에서 접근 모드에 대한 약어는 아래와 같다.
 * ReadWriteMany (RWX)  
 
 ### 17. 웹 어플리케이션 배포 실습  
+WordPress를 올리는 예제로 실습을 진행해 보자!
+
 작업 순서 : (백엔드) DB -> 서버 -> wp (프론트엔드)
 1. PersistentVolume (pv) 생성
   - 작성 시 storage에 대해 알 필요 있음 (용량, path, type 등)
