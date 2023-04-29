@@ -22,7 +22,7 @@ sitemap:
 ---
 
 Docker(도커), 쿠버네티스 관련 재직자 지원 수업의 마지막 강의 내용을 정리한다.  
-오늘 : Deployment, storage 및 실제 어플리케이션을 개발 및 배포하는 방법  
+오늘은 deployment와, 쿠버네티스의 storage 및 실제 어플리케이션을 개발 및 배포하는 방법에 대해 배울 예정이다.  
 
 ## 2023-04-29 강의 노트  
 ### 16. 쿠버네티스 명령어와 주요 객체 (2)
@@ -37,7 +37,8 @@ w2.example.com   Ready    <none>          9d    v1.27.1
 잘 되어 있다.  
 
 #### Deployment  
-Deployment 형태로 객체를 생성하기 전에 yaml 파일을 수정한다.  
+namespace 를 변경하여 실습하는 것도 가능하지만, 실습 환경인 노트북에서 cpu 개수를 할당하지 못 할 것 같아서 default 로 진행하였다.  
+Deployment 객체를 생성하기 위하여 yaml 파일을 작성하였다.  
 ```yaml
 ---
 apiVersion: apps/v1
