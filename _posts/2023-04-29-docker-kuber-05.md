@@ -567,4 +567,9 @@ CLI에서 접근 모드에 대한 약어는 아래와 같다.
   NAME                STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
   mysql-volumeclaim   Bound    pv1      1Gi        RWO                           9s
   ```  
-3. 10분 휴식 후 진행... 
+3. DB 서버 (이 경우 mysql) pod 을 올린다.  
+4. DB 서버 service 를 실행한다 (외부 접근 가능)
+5. wordpress 의 pv 생성
+6. wordpress 의 pvc 생성 (Binding 된 것 확인)
+7. wordpress 의 pod를 올리는데, 이 때 pod가 아니라 다시 자동 생성이 가능하도록 Deployment로 kind를 설정하면 좋음
+8. 
