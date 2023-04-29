@@ -551,6 +551,71 @@ CLI에서 접근 모드에 대한 약어는 아래와 같다.
 * ReadOnlyMany (ROX)
 * ReadWriteMany (RWX)  
 
+#### secret / configmap
+* configmap : 환경에 따라 다르거나 자주 변경되는 설정 옵션을 관리
+* secret : configmap과 유사한 기능이며, 보안에 민감한 설정을 관리  
+
+ConfigMap 을 생성하는 yaml 파일을 작성 해본다.  
+```yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dbconfig
+data:
+  DB_USER: "myuser"
+  USER_PASSWORD: "userpass"
+  MYSQL_DATABASE: mydb
+```  
+```bash
+$ kubectl get configmaps dbconfig
+NAME       DATA   AGE
+dbconfig   3      13ss
+$ kubectl describe configmaps dbconfig 
+Name:         dbconfig
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+MYSQL_DATABASE:
+----
+mydb
+USER_PASSWORD:
+----
+userpass
+DB_USER:
+----
+myuser
+
+BinaryData
+====
+
+Events:  <none>
+```  
+이제 config 파일들을 볼 수 있다. 하지만 비밀번호처럼 민감한 정보가 바로 config에서 조회가 가능하면 문제가 될 수 있다. 이런 정보를 아래와 같이 secret으로 생성 해 본다.  
+
+```bash
+$ kubectl create secret generic db-pw --from-literal db_root_pwd=mypass --from-literal db_user_pw=userpass
+secret/db-pw created
+$ kubectl get secrets db-pw
+NAME    TYPE     DATA   AGE
+db-pw   Opaque   2      24s
+$ kubectl describe secrets db-pw 
+Name:         db-pw
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+db_root_pwd:  6 bytes
+db_user_pw:   8 bytes
+```  
+
 ### 17. 웹 어플리케이션 배포 실습  
 WordPress를 올리는 예제로 실습을 진행해 보자!
 
@@ -579,7 +644,7 @@ WordPress를 올리는 예제로 실습을 진행해 보자!
 
 ![이미지](https://i.ibb.co/nQGj645/2023-04-29-173855.png)  
 
-잘 실행 되었다.  
+잘 실행 되었다. 위와 같은 방식으로 사이트를 금방 배포할 수 있다.  
 
 yaml 파일이 모두 같은 디렉토리에 있다면, apply 와 delete 를 모두 -f {디렉토리 명} 으로 해줄 수 있다.  
 ```bash
