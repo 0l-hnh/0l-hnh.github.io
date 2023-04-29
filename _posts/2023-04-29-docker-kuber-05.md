@@ -131,7 +131,7 @@ $ ip a s cni0
        valid_lft forever preferred_lft forever
 ```
 
-#### Deployment - Update
+#### Deployment - Rolling Update, Rollout
 쿠버네티스에서 지원하는 무중단 배포 방식에 대하여 알아본다.  
 
 예시로, 현재 사용하는 nginx 버전을 1.14에서 1.15로 업데이트 해보자. yaml 파일을 수정한 다음 다시 apply 하면 이미 생성된 객체가 수정된다.  
@@ -218,7 +218,6 @@ yaml 파일에서 maxUnavailable 은 rollinig update 동안 동작하지 않아�
 
 kubectl 명령어로 업데이트 한 deployment 에 대해서, 아래와 같이 rollout 해본다.  
 history 로 deployment의 업데이트 내역을 확인할 수 있으며, 원하는 리비전 번호를 지정하여 rollout, 즉 롤백 할 수 있다.  
-
 ```bash
 $ kubectl set image deployment nginx nginx=nginx:1.17 --record=true
 Flag --record has been deprecated, --record will be removed in the future
