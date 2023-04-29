@@ -523,3 +523,9 @@ spec:
       path: /var/nfs_storage
       server: 192.168.51.10
 ```  
+```bash
+$ apply -f nfs.yaml 
+$ kubectl exec -it nfs-storage-test -- /bin/bash
+(nfs-storage-test)$ touch /mnt/test
+```
+이제 nfs 서버로 사용하는 192.168.51.10 서버로 접속하면, 지정 위치에 해당 파일이 생성된 것을 확인할 수 있다.  
