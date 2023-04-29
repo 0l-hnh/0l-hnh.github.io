@@ -478,9 +478,6 @@ cat: /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernet
 /tmp 와 /var/tmp 에 위치한 파일은 일정 기간 동안 접근하지 않으면 삭제되니 주의해야 한다.  
 
 ##### nfs
-* nfs 공유 디렉토리의 마운트 포인트를 지정하거나, pv와 pvc 객체를 사용하여 관리 
-   * pv : 영구 스토리지 볼륨을 설정하기 위한 객체
-   * pvc : 영구 스토리지 볼륨 사용을 요청하기 위한 객체
 * 리눅스에서 가장 많이 쓰는 타입 (aws에서는 efs를 사용하는데, nfs와 굉장히 유사하기 때문에 nfs를 이해하면 잘 사용할 수 있음)  
 
 기존 Docker VM 으로 사용했던 192.168.51.10 VM을 nfs 서버로 사용한다.  
@@ -529,3 +526,21 @@ $ kubectl exec -it nfs-storage-test -- /bin/bash
 (nfs-storage-test)$ touch /mnt/test
 ```
 nfs 서버로 사용하는 192.168.51.10 서버로 접속하면, 지정 위치에 해당 파일이 생성된 것을 확인할 수 있다.  
+
+#### Storage Lifecycle
+* PV, PVC
+   * PV : 영구 스토리지 볼륨을 설정하기 위한 객체
+   * PVC : 영구 스토리지 볼륨 사용을 요청하기 위한 객체  
+
+1. Provisioning  
+  - 볼륨으로 사용하기 위한 공간을 확보
+  - PV 생성 (동적, 정적)
+2. Binding
+  - Provisioning으로 생성된 PV와 PVC를 연결
+  - PVC를 통해 조건에 맞는 PV와 연결
+  - PVC 한 개는 한 개의 PV에 bindings
+3. 사용
+  - PVC가 pod에 설정되고, pod는 PVC를 통해 불륨을 인식
+4. 반환
+  - PVC 사용이 끝난 뒤 자원이 반환됨.
+  - 반환된 자원에 대한 사용 정책 : retain, delete, recycle 등
