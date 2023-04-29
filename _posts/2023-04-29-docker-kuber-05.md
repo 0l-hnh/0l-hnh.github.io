@@ -36,7 +36,7 @@ w2.example.com   Ready    <none>          9d    v1.27.1
 ```  
 잘 되어 있다.  
 
-#### Deployment - Replica set  
+#### Deployment - Replicas  
 namespace 를 변경하여 실습하는 것도 가능하지만, 실습 환경인 노트북에서 cpu 개수를 할당하지 못 할 것 같아서 default 로 진행하였다.  
 Deployment 객체를 생성하기 위하여 yaml 파일을 작성하였다.  
 ```yaml
@@ -166,7 +166,7 @@ $ watch -n 1 -d kubectl get pods
 실행 중인 pods 전체가 중단되는 것이 아니라 일부만 중단되고, 새로운 pods들이 생기는 것을 확인 가능하다. 이 동작에 대해 아래와 같은 설명을 찾을 수 있다.  
 
 > 디플로이먼트는 업데이트되는 동안 일정한 수의 파드만 중단되도록 보장한다. 기본적으로 적어도 의도한 파드 수의 75% 이상이 동작하도록 보장한다(최대 25% 불가).  
-출처 : [쿠버네티스 공식 페이지](https://kubernetes.io/ko/docs/concepts/workloads/controllers/deployment/)  
+- 출처 : [쿠버네티스 공식 페이지](https://kubernetes.io/ko/docs/concepts/workloads/controllers/deployment/)  
 
 이 설정은 depolyment.app의 설정에서도 찾을 수 있다.  
 ```bash
@@ -183,3 +183,48 @@ MinReadySeconds:        0
 RollingUpdateStrategy:  25% max unavailable, 25% max surge
 (후략)
 ```  
+
+yaml 파일이 아니라 명령어로도 업데이트를 진행할 수 있다.  
+업데이트 후 kubectl get pods -o wide 로 ip 정보를 알아내어 curl로 접속 시도한 뒤, 버전을 확인한다.  
+```
+$ kubectl set image deployment nginx nginx=nginx:1.16
+deployment.apps/nginx image updated
+$ kubectl get pods -o wide
+NAME                     READY   STATUS              RESTARTS     AGE     IP            NODE             NOMINATED NODE   READINESS GATES
+nginx-57d98f69f6-4jlzw   0/1     ContainerCreating   0            13s     <none>        w2.example.com   <none>           <none>
+nginx-57d98f69f6-cjwdm   0/1     ContainerCreating   0            13s     <none>        w1.example.com   <none>           <none>
+nginx-57d98f69f6-hhpm6   0/1     ContainerCreating   0            13s     <none>        w2.example.com   <none>           <none>
+nginx-57d98f69f6-r5gq6   0/1     ContainerCreating   0            13s     <none>        w1.example.com   <none>           <none>
+nginx-57d98f69f6-v8hhf   0/1     ContainerCreating   0            13s     <none>        w1.example.com   <none>           <none>
+nginx-6dccb7ff87-6cm6p   1/1     Running             1 (9h ago)   4m12s   10.244.2.65   w2.example.com   <none>           <none>
+nginx-6dccb7ff87-9jlff   1/1     Running             1 (9h ago)   4m12s   10.244.2.63   w2.example.com   <none>           <none>
+nginx-6dccb7ff87-gb8jc   1/1     Running             1 (9h ago)   4m12s   10.244.2.64   w2.example.com   <none>           <none>
+nginx-6dccb7ff87-nd52r   1/1     Running             1 (9h ago)   4m12s   10.244.2.58   w2.example.com   <none>           <none>
+nginx-6dccb7ff87-qgdbp   1/1     Running             1 (9h ago)   4m12s   10.244.2.57   w2.example.com   <none>           <none>
+nginx-6dccb7ff87-sk84r   1/1     Running             1 (9h ago)   4m12s   10.244.2.60   w2.example.com   <none>           <none>
+nginx-6dccb7ff87-tsqrh   1/1     Running             1 (9h ago)   4m12s   10.244.2.61   w2.example.com   <none>           <none>
+nginx-6dccb7ff87-wm4wf   1/1     Running             1            4m12s   10.244.2.59   w2.example.com   <none>           <none>
+$ curl http://10.244.2.69/a.html
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.16.1</center>
+</body>
+</html>
+```
+'a.html' 페이지는 없기 때문에 접속되지 않았지만, 버전이 정상적으로 바뀌었다는 걸 확인할 수 있다.  
+
+yaml 파일에서 maxUnavailable 은 rollinig update 동안 동작하지 않아도 되는 pod의 개수이며, maxSurge는 rolling update 동안 추가로 실행될 pod의 개수이다.  
+kubectl 명령어로 업데이트 한 deployment 에 대해서, 아래와 같이 rollout 해본다.  
+```bash
+$ kubectl set image deployment nginx nginx=nginx:1.17 --record=true
+Flag --record has been deprecated, --record will be removed in the future
+deployment.apps/nginx image updated
+$ kubectl rollout history deployment nginx 
+deployment.apps/nginx 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         kubectl set image deployment nginx nginx=nginx:1.17 --record=true
+```
