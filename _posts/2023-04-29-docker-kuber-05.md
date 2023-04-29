@@ -245,3 +245,5 @@ nginx-6cff568d77   0         0         0       8m19s
 nginx-6dccb7ff87   0         0         0       15m
 ```  
 1.17로 업데이트 하였던 버전이 다시 1.16으로 롤 백 되었다. 이 상태에서 Replica set을 확인하면, 사용하지 않는 버전이 삭제 (pods 개수가 0) 되었음을 알 수 있다.  
+'kubectl rollout undo deployment nginx --to-revision=2' 에서 --to-revision 옵션이 없다면, 바로 이전 버전으로 롤 백 된다.  
+
