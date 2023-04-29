@@ -617,7 +617,7 @@ db_user_pw:   8 bytes
 ```  
 
 ### 17. 웹 어플리케이션 배포 실습  
-WordPress를 올리는 예제로 실습을 진행해 보자!
+WordPress를 올리는 예제로 실습을 진행하였다.  
 
 작업 순서 : (백엔드) DB -> 서버 -> wp (프론트엔드)
 1. PersistentVolume (pv) 생성
