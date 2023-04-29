@@ -381,7 +381,7 @@ $ curl http://10.244.2.85
 $ curl http://10.244.1.58
 welcome apache container
 ```  
-이런 문제를 방지하기 위하여 yaml 파일에 'nodeName'을 쓰거나, 'nodeSelector' 를 설정할 수 있다.  
+이런 문제를 방지하기 위하여 yaml 파일에 'nodeName'을 쓰거나, 'nodeSelector' 를 설정할 수 있다. nodeName을 쓰는 방식으로 지정을 해 보자,   
 ```yaml
 ---
 apiVersion: v1
