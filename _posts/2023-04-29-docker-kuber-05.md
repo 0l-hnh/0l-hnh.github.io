@@ -550,4 +550,3 @@ CLI에서 접근 모드에 대한 약어는 아래와 같다.
 * ReadWriteOnce (RWO)
 * ReadOnlyMany (ROX)
 * ReadWriteMany (RWX)
-
