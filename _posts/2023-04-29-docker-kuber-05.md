@@ -465,7 +465,7 @@ $ ssh w1.example.com
 (w1)$ sudo cat /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernetes.io~empty-dir/redis-storage/redis.txt
 hello redis
 ```  
-해당 pod에서 생성한 데이터가 node 디렉토리에 저장되어 있다는 것을 확인 가능하다.  
+해당 pod에서 생성한 데이터가 node 디렉토리에 저장되어 있으며, 할당한 메모리만큼 크기가 잡힌 것을 확인 가능하다.  
 단, 해당 데이터는 pod이 삭제되면 함께 삭제되는 pod의 sub-directory 에 위치해 있다. 따라서 pod이 삭제된 후에는 해당 파일을 확인할 수 없다.  
 ```bash
 $ kubectl delete pods redis
@@ -475,4 +475,3 @@ $ ssh w1
 cat: /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernetes.io~empty-dir/redis-storage/redis.txt: No such file or directory
 ```  
 해당 pod을 삭제 후 동일 node 내 디렉토리에 접근을 시도하니, 오류가 발생했다.  
-
