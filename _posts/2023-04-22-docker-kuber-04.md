@@ -4,8 +4,8 @@ title:  "[Docker] Docker 강의 정리 (4) - 쿠버네티스 개념, CRI, 세팅
 date:   2023-04-22 10:10:00 +0900
 
 categories:
-  - docker
-tags: [docker, linux]
+  - docker, kubernetes
+tags: [docker, kubernetes, linux]
 
 author_profile: true
 sidebar:

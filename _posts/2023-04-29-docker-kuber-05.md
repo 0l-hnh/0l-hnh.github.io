@@ -4,8 +4,8 @@ title:  "[Docker] Docker 강의 정리 (5) - Deployment, Storage, Application �
 date:   2023-04-29 10:10:00 +0900
 
 categories:
-  - docker
-tags: [docker, linux]
+  - docker, kubernetes
+tags: [docker, kubernetes, linux]
 
 author_profile: true
 sidebar:
@@ -416,5 +416,37 @@ $ curl http://10.244.1.59
 welcome apache container
 ```  
 myapache-new4가 지정한 node에 할당된 것을 확인 가능하다. 이제 myapache-new4는 원하는 스토리지에 저장된 데이터를 사용 가능하다.  
+해당 방법은 실제 프로덕션 배포 환경에서 사용하기에는 부적절할 수 있다.  
 
-해당 방법은 실제 프로덕션 배포 환경에서 사용하기에는 부적절할 수 있다. 스토리지 개념을 이해하기 위해서 실습을 진행하였다고 이해하면 된다.  
+##### emptyDir
+* 컨테이너가 실행되는 동안만 존재
+* pod가 삭제되지 않ㅇ을 시 emptyDir 은 삭제되지 않고 계속해서 사용 가능  
+* 디스크 대신 메모리를 사용하는 것이 가능함  
+
+자세한 설명 : [공식 사이트 링크](https://kubernetes.io/ko/docs/tasks/configure-pod-container/configure-volume-storage/)  
+
+redis 이미지를 사용하고, emptyDir 볼륨을 'memory'로 사용하는 예시 yaml 을 아래와 같이 작성하였다.  
+```yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis
+spec:
+  containers:
+  - name: redis
+    image: redis
+    volumeMounts:
+    - name: redis-storage
+      mountPath: /data/redis
+  volumes:
+  - name: redis-storage
+    emptyDir:
+      medium: Memory
+      sizeLimit: 1Gi # sizeLimit 지정하지 않으면 가용 메모리 모두 사용할 수 있음
+```  
+```bash
+$ kubectl apply -f redis.yaml 
+pod/redis created
+```  
+잘 실행 된다.
