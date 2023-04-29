@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] 쿠버네티스 강의 정리 (5) - Deployment, Storage, Application 배포"
+title:  "[Docker] 쿠버네티스 강의 정리 (5) - 쿠버네티스 조요 개념 (2), Application 배포 실습"
 date:   2023-04-29 10:10:00 +0900
 
 categories:
