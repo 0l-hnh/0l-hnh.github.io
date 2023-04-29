@@ -381,6 +381,41 @@ $ curl http://10.244.2.85
 $ curl http://10.244.1.58
 welcome apache container
 ```  
-이런 문제를 방지하기 위하여 'nodeSelector' 를 지정할 수도 있다.  
+이런 문제를 방지하기 위하여 yaml 파일에 'nodeName'을 쓰거나, 'nodeSelector' 를 설정할 수 있다.  
+```yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapache-new4
+  labels:
+    app: myweb-svc
+    #labels is not essential
+spec:
+  containers:
+  - name: myapache-container
+    image: httpd:2.4
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: hostpath-volume
+      mountPath: /usr/local/apache2/htdocs
+  nodeName: w1.example.com
+  volumes:
+  - name: hostpath-volume
+    hostPath:
+      path: /var/tmp/web_docs
+```  
+```bash
+$ kubectl get pods -o wide
+NAME            READY   STATUS    RESTARTS   AGE     IP            NODE             NOMINATED NODE   READINESS GATES
+myapache-new    1/1     Running   0          7m5s    10.244.2.85   w2.example.com   <none>           <none>
+myapache-new2   1/1     Running   0          6m      10.244.1.58   w1.example.com   <none>           <none>
+myapache-new3   1/1     Running   0          5m52s   10.244.2.86   w2.example.com   <none>           <none>
+myapache-new4   1/1     Running   0          7s      10.244.1.59   w1.example.com   <none>           <none>
+$ curl http://10.244.1.59
+welcome apache container
+```  
+myapache-new4가 지정한 node에 할당된 것을 확인 가능하다. 이제 myapache-new4는 원하는 스토리지에 저장된 데이터를 사용 가능하다.  
 
 해당 방법은 실제 프로덕션 배포 환경에서 사용하기에는 부적절할 수 있다. 스토리지 개념을 이해하기 위해서 실습을 진행하였다고 이해하면 된다.  
