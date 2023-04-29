@@ -359,7 +359,7 @@ $ ssh w1.example.com
 (w1)$ ls /var/tmp/web_docs/
 index.html
 ```  
-이제 현재 pod가 삭제되어도, 동일한 w1 node에 할당된 pod는 기존과 동일한 페이지를 볼 수 있다. 단, 다른 node에 pod가 할당된다면 해당 페이지를 볼 수 없다.  
+현재 pod가 삭제되어도, 동일한 w1 node에 할당된 pod는 기존과 동일한 페이지를 볼 수 있다. 단, 다른 node에 pod가 할당된다면 해당 페이지를 볼 수 없다.  
 예를 들어, 아래와 같이 apache 서버를 몇 개 더 띄운 뒤 접속을 시도할 시 기존 pod과 동일한 node를 사용할 때는 새로 만들어 준 페이지를 볼 수 있으나, 그렇지 않을 때는 다른 페이지가 난다는 것을 확인할 수 있다.  
 ```bash
 $ kubectl get pods -o wide
@@ -528,4 +528,4 @@ $ apply -f nfs.yaml
 $ kubectl exec -it nfs-storage-test -- /bin/bash
 (nfs-storage-test)$ touch /mnt/test
 ```
-이제 nfs 서버로 사용하는 192.168.51.10 서버로 접속하면, 지정 위치에 해당 파일이 생성된 것을 확인할 수 있다.  
+nfs 서버로 사용하는 192.168.51.10 서버로 접속하면, 지정 위치에 해당 파일이 생성된 것을 확인할 수 있다.  
