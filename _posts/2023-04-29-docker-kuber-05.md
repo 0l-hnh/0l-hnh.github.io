@@ -419,8 +419,8 @@ myapache-new4가 지정한 node에 할당된 것을 확인 가능하다. 이제 
 해당 방법은 실제 프로덕션 배포 환경에서 사용하기에는 부적절할 수 있다.  
 
 ##### emptyDir
-* 컨테이너가 실행되는 동안만 존재
-* pod가 삭제되지 않ㅇ을 시 emptyDir 은 삭제되지 않고 계속해서 사용 가능  
+* 영구 스토리지는 아니며, pod이 실행될 동안만 존재  
+* emptyDir의 생명 주기는 pod 단위이기 때문에, 컨테이너가 삭제되거나 재시작 되어도 삭제되지 않고 계속해서 사용 가능  
 * 디스크 대신 메모리를 사용하는 것이 가능함  
 
 자세한 설명 : [공식 사이트 링크](https://kubernetes.io/ko/docs/tasks/configure-pod-container/configure-volume-storage/)  
@@ -453,3 +453,26 @@ NAME    READY   STATUS    RESTARTS   AGE   IP            NODE             NOMINA
 redis   1/1     Running   0          86s   10.244.1.60   w1.example.com   <none>           <none>
 ```  
 w1.example.com 에 pod이 배치 되었다. 해당 node 에 스토리지가 배정 되었을 것이다.  
+```bash
+$ kubectl exec -it redis -- /bin/bash
+(redis)$ df -ah | grep redis
+tmpfs                        1.0G     0  1.0G   0% /data/redis
+(redis)$ echo "hello redis" > /data/redis/redis.txt
+(redis)$ exit
+$ ssh w1.example.com
+(w1)$ sudo find / -name redis.txt
+/var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernetes.io~empty-dir/redis-storage/redis.txt
+(w1)$ sudo cat /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernetes.io~empty-dir/redis-storage/redis.txt
+hello redis
+```  
+해당 pod에서 생성한 데이터가 node 디렉토리에 저장되어 있다는 것을 확인 가능하다.  
+단, 해당 데이터는 pod이 삭제되면 함께 삭제되는 pod의 sub-directory 에 위치해 있다. 따라서 pod이 삭제된 후에는 해당 파일을 확인할 수 없다.  
+```bash
+$ kubectl delete pods redis
+pod "redis" deleted
+$ ssh w1
+(w1)$ sudo cat /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernetes.io~empty-dir/redis-storage/redis.txt
+cat: /var/lib/kubelet/pods/569c5636-8dea-42f3-8ebb-a64e8e3b0de0/volumes/kubernetes.io~empty-dir/redis-storage/redis.txt: No such file or directory
+```  
+해당 pod을 삭제 후 동일 node 내 디렉토리에 접근을 시도하니, 오류가 발생했다.  
+
