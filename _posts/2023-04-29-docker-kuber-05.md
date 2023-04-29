@@ -571,5 +571,6 @@ CLI에서 접근 모드에 대한 약어는 아래와 같다.
 4. DB 서버 service 를 실행한다 (외부 접근 가능)
 5. wordpress 의 pv 생성
 6. wordpress 의 pvc 생성 (Binding 된 것 확인)
-7. wordpress 의 pod를 올리는데, 이 때 pod가 아니라 다시 자동 생성이 가능하도록 Deployment로 kind를 설정하면 좋음
-8. 
+7. wordpress 의 pod 생성
+  - 이 때 pod가 아니라 다시 자동 생성이 가능하도록 Deployment로 kind를 설정하면 좋음
+8. wordpress 의 외부에서 접속하기 위한 service를 실행  
