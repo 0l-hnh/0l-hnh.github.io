@@ -399,6 +399,7 @@ spec:
     - name: hostpath-volume
       mountPath: /usr/local/apache2/htdocs
   nodeName: w1.example.com
+  # nodeName은 'containers'와 정렬을 맞춰야 한다. 
   volumes:
   - name: hostpath-volume
     hostPath:
