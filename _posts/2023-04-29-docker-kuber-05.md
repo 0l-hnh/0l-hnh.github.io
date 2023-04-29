@@ -350,5 +350,14 @@ tmpfs                         64M     0   64M   0% /proc/timer_list
 tmpfs                         64M     0   64M   0% /proc/sched_debug
 tmpfs                        909M     0  909M   0% /proc/scsi
 tmpfs                        909M     0  909M   0% /sys/firmware
+(apache)$ echo "welcome apache container" > index.html
+(apache)$ ls
+index.html
 ```
-해당 pod로 접속하여 host의 디렉토리가 잘 마운트 되어 있는 것을 확인하였다.  
+해당 pod로 접속하여 host의 디렉토리가 잘 마운트 되어 있는 것을 확인하였다. 그 후 'index.html' 페이지를 생성하였다. 이제 해당 pod이 실행 중인 w1.example.com node에 접속하면, 볼륨으로 준 디렉토리에 해당 파일이 생성되어 있다.  
+```bash
+$ ssh w1.example.com 
+(w1)$ ls /var/tmp/web_docs/
+index.html
+```  
+단, 해당 방법은 실제 프로덕션 배포 환경에서 사용하기에는 부적절할 수 있다. 스토리지 개념을 이해하기 위해서 실습을 진행하였다고 이해하면 된다.  
