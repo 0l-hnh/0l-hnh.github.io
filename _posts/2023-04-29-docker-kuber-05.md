@@ -269,3 +269,7 @@ $ cat /etc/hosts
 쿠버네티스의 영구 볼륨 설정에 대해 알아본다.  
 [쿠버네티스 공식 페이지](https://kubernetes.io/ko/docs/concepts/storage/) 에서 다양한 종류의 스토리지를 확인할 수 있다.  
 오늘 수업에서는 스토리지의 기본적인 사용 방식을 이해하고, 몇 가지 타입을 알아보도록 한다.  
+
+##### hostPath
+host에 있는 디스크를 사용한다.  
+![hostPath 이미지](https://i.ibb.co/kSJQYJq/2023-04-29-115352.png)  
