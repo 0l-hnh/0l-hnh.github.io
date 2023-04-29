@@ -263,3 +263,7 @@ $ cat /etc/hosts
 192.168.14.52   w2.example.com     w2
 # 외부에서는 '192.168.14.50:30632' 로 접근 가능하다. 
 ```  
+또, 이 방법 외에 'LoadBalacer' type으로 버전을 설정할 수가 있다. 이 type은 클라우드 환경인 gcp나 aws 에서는 기본으로 지원하지만 Local PC인 경우 오픈소스 프로젝트인 metal lb 를 설치해야 한다.  
+
+### Storage  
+영구 볼륨 설정에 대해 알아본다.  
