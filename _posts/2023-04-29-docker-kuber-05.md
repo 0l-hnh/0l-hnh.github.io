@@ -214,9 +214,11 @@ $ curl http://10.244.2.69/a.html
 </html>
 ```
 'a.html' 페이지는 없기 때문에 접속되지 않았지만, 버전이 정상적으로 바뀌었다는 걸 확인할 수 있다.  
-
 yaml 파일에서 maxUnavailable 은 rollinig update 동안 동작하지 않아도 되는 pod의 개수이며, maxSurge는 rolling update 동안 추가로 실행될 pod의 개수이다.  
+
 kubectl 명령어로 업데이트 한 deployment 에 대해서, 아래와 같이 rollout 해본다.  
+history 로 deployment의 업데이트 내역을 확인할 수 있으며, 원하는 리비전 번호를 지정하여 rollout, 즉 롤백 할 수 있다.  
+
 ```bash
 $ kubectl set image deployment nginx nginx=nginx:1.17 --record=true
 Flag --record has been deprecated, --record will be removed in the future
@@ -227,4 +229,20 @@ REVISION  CHANGE-CAUSE
 1         <none>
 2         <none>
 3         kubectl set image deployment nginx nginx=nginx:1.17 --record=true
-```
+$ kubectl rollout undo deployment nginx --to-revision=2
+deployment.apps/nginx rolled back
+$ curl http://10.244.2.77/a.html
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.16.1</center>
+</body>
+</html>
+$ kubectl get replicasets.apps 
+NAME               DESIRED   CURRENT   READY   AGE
+nginx-57d98f69f6   10        10        10      11m
+nginx-6cff568d77   0         0         0       8m19s
+nginx-6dccb7ff87   0         0         0       15m
+```  
+1.17로 업데이트 하였던 버전이 다시 1.16으로 롤 백 되었다. 이 상태에서 Replica set을 확인하면, 사용하지 않는 버전이 삭제 (pods 개수가 0) 되었음을 알 수 있다.  
