@@ -576,3 +576,13 @@ WordPress를 올리는 예제로 실습을 진행해 보자!
 7. wordpress 의 pod 생성
   - 이 때 pod가 아니라 다시 자동 생성이 가능하도록 Deployment로 kind를 설정하면 좋음
 8. wordpress 의 외부에서 접속하기 위한 service를 실행  
+
+![이미지](https://i.ibb.co/nQGj645/2023-04-29-173855.png)  
+
+잘 실행 되었다.  
+
+yaml 파일이 모두 같은 디렉토리에 있다면, apply 와 delete 를 모두 -f {디렉토리 명} 으로 해줄 수 있다.  
+```bash
+$ kubectl apply -f .
+$ kubectl delete -f .
+```  
