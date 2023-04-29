@@ -439,7 +439,7 @@ $ curl http://10.105.77.228:8001
 It works!
 ```
 서비스가 생성되고, IP로 접속이 된다는 사실을 알 수 있다. 서비스는 패킷을 받아서 Endpoints 의 실행되는 pod들에 round robin 방식으로 데이터를 분산하여 처리하도록  한다. (멋지다)  
-이 때, Cluster 안에서 직접 접속하는 것이 아니라 외부에서 접속하려면 서비스 Type을 변경할 필요가 있다.  
+이 때, Cluster 안에서 직접 접속하는 것이 아니라 외부에서 접속하려면 서비스 Type을 변경할 필요가 있다. 현재 보이는 Cluster ip는 사설 ip이기 때문에 Cluster 안에서만 접속할 수 있다. 외부에서는 라우팅 테이블의 정보도 없고, 라우팅 정보가 없기 때문에 접근이 되지 않는다.  
 쿠버네티스의 경우 TYPE을 서비스 실행 중 변경할 수 있다. kubectl edit svc {service} 로 편집한다.  
 ```bash
 $ kubectl edit service myweb-service 

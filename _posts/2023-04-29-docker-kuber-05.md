@@ -247,3 +247,19 @@ nginx-6dccb7ff87   0         0         0       15m
 1.17로 업데이트 하였던 버전이 다시 1.16으로 롤 백 되었다. 이 상태에서 Replica set을 확인하면, 사용하지 않는 버전이 삭제 (pods 개수가 0) 되었음을 알 수 있다.  
 'kubectl rollout undo deployment nginx --to-revision=2' 에서 --to-revision 옵션이 없다면, 바로 이전 버전으로 롤 백 된다.  
 
+#### Service : LoadBalancer type  
+먼저 지난 주에 배웠던 service type 두 개에 대해서 복습한다.  
+label 을 가진 pod 생성 후, service 를 생성하면 해당 service 에 Cluster IP로 접속이 가능하다. 또한, 외부 접속이 가능하기 위해서는 'NodePort' type으로 변경하여 Node IP (cat /etc/hosts의 IP)와 Port 번호로 접근할 수 있다.  
+```bash
+$ kubectl get svc
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP          6d20h
+myweb-service   NodePort    10.105.77.228   <none>        8001:30632/TCP   6d19h
+$ cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+:1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.14.50   m.example.com      m
+192.168.14.51   w1.example.com     w1
+192.168.14.52   w2.example.com     w2
+# 외부에서는 '192.168.14.50:30632' 로 접근 가능하다. 
+```  
