@@ -360,4 +360,27 @@ $ ssh w1.example.com
 (w1)$ ls /var/tmp/web_docs/
 index.html
 ```  
-단, 해당 방법은 실제 프로덕션 배포 환경에서 사용하기에는 부적절할 수 있다. 스토리지 개념을 이해하기 위해서 실습을 진행하였다고 이해하면 된다.  
+이제 현재 pod가 삭제되어도, 동일한 w1 node에 할당된 pod는 기존과 동일한 페이지를 볼 수 있다. 단, 다른 node에 pod가 할당된다면 해당 페이지를 볼 수 없다.  
+예를 들어, 아래와 같이 apache 서버를 몇 개 더 띄운 뒤 접속을 시도할 시 기존 pod과 동일한 node를 사용할 때는 새로 만들어 준 페이지를 볼 수 있으나, 그렇지 않을 때는 다른 페이지가 난다는 것을 확인할 수 있다.  
+```bash
+$ kubectl get pods -o wide
+NAME            READY   STATUS    RESTARTS   AGE   IP            NODE             NOMINATED NODE   READINESS GATES
+myapache-new    1/1     Running   0          82s   10.244.2.85   w2.example.com   <none>           <none>
+myapache-new2   1/1     Running   0          17s   10.244.1.58   w1.example.com   <none>           <none>
+myapache-new3   1/1     Running   0          9s    10.244.2.86   w2.example.com   <none>           <none>
+$ curl http://10.244.2.85
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+ <head>
+  <title>Index of /</title>
+ </head>
+ <body>
+<h1>Index of /</h1>
+<ul></ul>
+</body></html>
+$ curl http://10.244.1.58
+welcome apache container
+```  
+이런 문제를 방지하기 위하여 'nodeSelector' 를 지정할 수도 있다.  
+
+해당 방법은 실제 프로덕션 배포 환경에서 사용하기에는 부적절할 수 있다. 스토리지 개념을 이해하기 위해서 실습을 진행하였다고 이해하면 된다.  
