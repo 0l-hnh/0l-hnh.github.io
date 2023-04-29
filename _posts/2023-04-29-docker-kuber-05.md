@@ -524,14 +524,15 @@ spec:
 $ apply -f nfs.yaml 
 $ kubectl exec -it nfs-storage-test -- /bin/bash
 (nfs-storage-test)$ touch /mnt/test
-```
+```  
 nfs 서버로 사용하는 192.168.51.10 서버로 접속하면, 지정 위치에 해당 파일이 생성된 것을 확인할 수 있다.  
 
-#### Storage Lifecycle
-* PV, PVC
-   * PV : 영구 스토리지 볼륨을 설정하기 위한 객체
-   * PVC : 영구 스토리지 볼륨 사용을 요청하기 위한 객체  
+#### Storage's Lifecycle
+##### PV, PVC
+* PV : 영구 스토리지 볼륨을 설정하기 위한 객체
+* PVC : 영구 스토리지 볼륨 사용을 요청하기 위한 객체  
 
+##### 라이프사이클
 1. Provisioning  
   - 볼륨으로 사용하기 위한 공간을 확보
   - PV 생성 (동적, 정적)
@@ -544,3 +545,9 @@ nfs 서버로 사용하는 192.168.51.10 서버로 접속하면, 지정 위치�
 4. 반환
   - PVC 사용이 끝난 뒤 자원이 반환됨.
   - 반환된 자원에 대한 사용 정책 : retain, delete, recycle 등
+
+CLI에서 접근 모드에 대한 약어는 아래와 같다.
+* ReadWriteOnce (RWO)
+* ReadOnlyMany (ROX)
+* ReadWriteMany (RWX)
+
