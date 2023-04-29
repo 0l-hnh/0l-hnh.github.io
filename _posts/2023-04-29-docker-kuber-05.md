@@ -37,3 +37,4 @@ w2.example.com   Ready    <none>          9d    v1.27.1
 잘 되어 있다.  
 
 #### Deployment  
+Deployment 형태로 객체를 생성하기 전에 yaml 파일을 수정한다.  
