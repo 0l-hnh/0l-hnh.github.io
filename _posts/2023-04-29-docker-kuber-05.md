@@ -527,12 +527,12 @@ $ kubectl exec -it nfs-storage-test -- /bin/bash
 ```  
 nfs 서버로 사용하는 192.168.51.10 서버로 접속하면, 지정 위치에 해당 파일이 생성된 것을 확인할 수 있다.  
 
-#### Storage's Lifecycle
+#### PersistentVolume
 ##### PV, PVC
 * PV : 영구 스토리지 볼륨을 설정하기 위한 객체
 * PVC : 영구 스토리지 볼륨 사용을 요청하기 위한 객체  
 
-##### 라이프사이클
+##### Storage's Lifecycle
 1. Provisioning  
   - 볼륨으로 사용하기 위한 공간을 확보
   - PV 생성 (동적, 정적)
@@ -549,4 +549,7 @@ nfs 서버로 사용하는 192.168.51.10 서버로 접속하면, 지정 위치�
 CLI에서 접근 모드에 대한 약어는 아래와 같다.
 * ReadWriteOnce (RWO)
 * ReadOnlyMany (ROX)
-* ReadWriteMany (RWX)
+* ReadWriteMany (RWX)  
+
+### 17. 웹 어플리케이션 배포 실습  
+작업 순서 : (백엔드) DB -> 서버 -> wp (프론트엔드)
