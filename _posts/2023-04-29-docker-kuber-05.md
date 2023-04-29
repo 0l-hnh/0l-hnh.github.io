@@ -498,12 +498,12 @@ nfs-server를 설치한 VM의 /etc/exports에 아래와 같이 연결할 서버�
 #권한 설정을 잘못 하면 연결이 되지 않으니 주의한다. 
 $ exportfs -a
 ```  
-이제 nfs 서버로 쓸 VM 세팅이 완료되었다. work node와 master node에도 nfs-utils를 설치하고, 명령어를 사용하여 mount 한다. mount 시에는 root로 명령어를 실행해야 편하다.  
+nfs 서버로 쓸 VM 세팅이 완료되었다. work node와 master node에도 nfs-utils를 설치하고, 명령어를 사용하여 mount 한다. mount 시에는 root로 명령어를 실행해야 편하다.  
 ```bash
 $ sudo yum -y install nfs-utils
 $ mount -t nfs -o rw 192.168.51.10:/var/nfs_storage /mnt/nfs
 ```
-이제 nfs 서버에 /mnt/nfs 디렉토리가 마운트 되었다. 이제 pod의 yaml 파일 내에 nfs-volume 설정을 해 본다.  
+이제 nfs 서버에 /mnt/nfs 디렉토리가 마운트 되었다. pod의 yaml 파일 내에 nfs-volume 설정을 해 본다.  
 ```yaml
 apiVersion: v1
 kind: Pod
