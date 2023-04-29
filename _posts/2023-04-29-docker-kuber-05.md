@@ -22,9 +22,10 @@ sitemap:
 ---
 
 Docker(도커), 쿠버네티스 관련 재직자 지원 수업의 마지막 강의 내용을 정리한다.  
+오늘 : Deployment, storage 및 실제 어플리케이션을 개발 및 배포하는 방법  
 
 ## 2023-04-29 강의 노트  
-### 16. Pod 이어서  
+### 16. 쿠버네티스 명령어와 주요 객체 (2)
 강의 시작 전에, VM을 실행하고 모두 잘 연결되어 있는지 확인한다.  
 ```bash
 $ kubectl get nodes
@@ -34,3 +35,5 @@ w1.example.com   Ready    <none>          9d    v1.27.1
 w2.example.com   Ready    <none>          9d    v1.27.1
 ```  
 잘 되어 있다.  
+
+#### Deployment  
