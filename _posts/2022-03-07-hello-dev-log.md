@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Github 블로그 시작"
+title:  "[DevLog] Github 블로그 시작"
 date:   2022-03-08 00:41:35 +0900
 
 categories:
