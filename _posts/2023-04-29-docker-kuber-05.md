@@ -617,6 +617,7 @@ db_user_pw:   8 bytes
 ```  
 
 ### 17. 웹 어플리케이션 배포 실습  
+#### WordPress 배포
 WordPress를 올리는 예제로 실습을 진행하였다.  
 
 작업 순서 : (백엔드) DB -> 서버 -> wp (프론트엔드)
@@ -652,4 +653,15 @@ $ kubectl apply -f .
 $ kubectl delete -f .
 ```  
 
+#### 본인의 Docker Image 배포
 마지막으로, Dockerfile을 local에서 빌드한 뒤 Docker hub에 올려서, 쿠버네티스의 클러스터가 배포할 수 있도록 하는 실습을 진행하였다.  
+
+1. Dockerfile을 작성한 뒤 본인의 Docker Image를 Hub에 업로드
+2. pod 설정 yaml 파일의 'containers: image:' 에 원하는 이미지 명과 태그를 기입
+3. pod에서 컨테이너 생성 시 해당 이미지를 다운로드  
+4. container가 실행된 pod에 service를 연결하면, 외부에서 Node IP로 접속할 수 있음! 
+
+쿠버네티스 용도로 활용 중인 VM에 Docker 설치가 되어있지 않아서, 강사님께서 미리 올려 주신 Docker Image를 사용하여 해당 실습 진행 하였다.  
+
+### 후기
+재미있었다!  
