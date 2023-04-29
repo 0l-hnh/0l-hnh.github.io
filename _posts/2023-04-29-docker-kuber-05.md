@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] 쿠버네티스 강의 정리 (5) - 쿠버네티스 주요 개념 (Deployment, Storage), Application 배포 실습"
+title:  "[Docker] 쿠버네티스 강의 정리 (5) - 쿠버네티스 주요 개념(Deployment, Storage), Application 배포 실습"
 date:   2023-04-29 10:10:00 +0900
 
 categories:
@@ -651,3 +651,5 @@ yaml 파일이 모두 같은 디렉토리에 있다면, apply 와 delete 를 모
 $ kubectl apply -f .
 $ kubectl delete -f .
 ```  
+
+마지막으로, Dockerfile을 local에서 빌드한 뒤 Docker hub에 올려서, 쿠버네티스의 클러스터가 배포할 수 있도록 하는 실습을 진행하였다.  

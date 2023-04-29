@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[Docker] 쿠버네티스 강의 정리 (4) - 쿠버네티스란? CRI, 세팅 및 주요 개념 (1)"
+title:  "[Docker] 쿠버네티스 강의 정리 (4) - 쿠버네티스란? CRI, 세팅 및 주요 개념(Pod, Service, ReplicaSet)"
 date:   2023-04-22 10:10:00 +0900
 
 categories:
