@@ -114,9 +114,14 @@ AWS Analytics IMD - Intro
 
 ## Lab#2
 ### AWS Glue DataBrew 
-요약 : 시각적 인터페이스를 제공하여, ETL 작업을 정의하고 쉽게 할 수 있도록 돕는 서비스  
+요약 : '노코드'로 시각적 인터페이스를 제공하여, ETL 작업을 정의하고 쉽게 할 수 있도록 돕는 서비스  
 - Usage Flow
   1. 데이터 세트 정의
   2. 프로젝트를 만들고 레시피 (데이터 변환 단계) 정의
   3. 레시피 생성
   4. JOB 작성 & 실행  
+- AWS EventBridge & Step Function 과 스케쥴 실행 연동 가능
+- 특정 타이밍에 EventBridge 에 이벤트를 발행해, event-driven 처리를 구현 가능
+- AWS 계정당 동시 JOB, 데이터 세트 등에 기본 할당량 값이 있으나 soft limit 이기 때문에 조절 가능  
+- 과금은 사용 세션과 DataBrewJOB 을 합산하여 계산  
+
