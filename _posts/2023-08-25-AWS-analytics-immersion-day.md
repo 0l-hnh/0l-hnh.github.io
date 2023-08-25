@@ -182,3 +182,7 @@ AWS Analytics IMD - Intro
 
 ### Amazon Quicksight
 - 사용 사례 : 대시보드 제공, Insight 내장, 기업 보고서 작성
+- 커스텀 모델 생성 후 임베디드 가능
+- Data Connectivity
+  - 엑셀, CSV, 다양한 클라우드 및 어플리케이션과 통합 가능
+  - SPICe 엔진 사용, 사용자 수와 관계 없이 성능과 규모를 제공
