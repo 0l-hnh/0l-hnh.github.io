@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[DevLog] AWS 교육 (General Immersion Day) 참가"
+title:  "[DevLog] AWS 교육 (Analytics Immersion Day) 참가"
 date:   2023-08-25 10:10:00 +0900
 
 categories:
