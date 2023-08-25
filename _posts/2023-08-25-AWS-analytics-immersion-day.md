@@ -186,3 +186,13 @@ AWS Analytics IMD - Intro
 - Data Connectivity
   - 엑셀, CSV, 다양한 클라우드 및 어플리케이션과 통합 가능
   - SPICe 엔진 사용, 사용자 수와 관계 없이 성능과 규모를 제공
+  - AWS 데이터 소스와 함께 사용하면 거버넌스에서 활용성이 향상됨  
+  - AWS Glue Crawler 사용 시, Glue data 카탈로그를 생성 후 보안 및 권한 설정 적용 후 데이터 쿼리, 시각화
+  - AWS GLUE Databrew 사용 시, 코드 없이 데이터를 정제한 뒤 준비된 데이터를 S3 로 내보내고, SPICE 로 데이터를 가져온 후 시각화
+- Augmented Analytics
+  - Q : ML 기반 NLQ로 셀프 서비스 분석 (질문에 자동으로 답변하는 table 생성)
+- Enterprise Reporting
+  - PDF 생성 시 페이지 넘어갈 때 표가 잘리지 않고 테이블이 예쁘게 나온다고 함
+  - 그 외 예약 전송, 스냅샷 기록 등
+
+### 실습
