@@ -149,32 +149,31 @@ AWS Analytics IMD - Intro
   3. S3 에 데이터가 저장된 것을 확인 
 
 - 쿼리문 예시
+  ```java
+  CREATE TABLE 
+      "db_cur_lmsdemo"."agg_pageview_count_by_user_course"
+  WITH (
+    external_location = 's3://dataedu-curated-_guid_/lmsdemo/agg_pageview_count_by_user_course/',
+    format = 'PARQUET',
+    parquet_compression = 'SNAPPY'
+  )
+  AS
+  SELECT 
+      user_id,
+      course_id,
+      timestamp_year,
+      timestamp_month,
+      timestamp_day,
+      timestamp_hour,
+      count(id) AS pageview_count
+  FROM 
+      "db_raw_lmsdemo"."requests"
+  GROUP BY 
+      user_id,
+      course_id,
+      timestamp_year,
+      timestamp_month,
+      timestamp_day,
+      timestamp_hour
 
-```java
-CREATE TABLE 
-    "db_cur_lmsdemo"."agg_pageview_count_by_user_course"
-WITH (
-  external_location = 's3://dataedu-curated-_guid_/lmsdemo/agg_pageview_count_by_user_course/',
-  format = 'PARQUET',
-  parquet_compression = 'SNAPPY'
-)
-AS
-SELECT 
-    user_id,
-    course_id,
-    timestamp_year,
-    timestamp_month,
-    timestamp_day,
-    timestamp_hour,
-    count(id) AS pageview_count
-FROM 
-    "db_raw_lmsdemo"."requests"
-GROUP BY 
-    user_id,
-    course_id,
-    timestamp_year,
-    timestamp_month,
-    timestamp_day,
-    timestamp_hour
-
-```  
+  ```  
