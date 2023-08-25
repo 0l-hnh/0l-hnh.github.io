@@ -203,3 +203,35 @@ AWS Analytics IMD - Intro
   4. 그래프 생성 및 편집  
 
 ![DashBoard Example](https://i.postimg.cc/nc7Wz8bQ/image.png)  
+
+## Lab#4 : Redshift
+### 요약
+완전 관리형 데이터 웨어하우스 서비스로, 복잡한 분석 쿼리를 지원하도록 설계 됨  
+관리 규모가 큰 데이터베이스를 운영할 경우, Redshift 사용하기를 권장  
+
+### Redshift 
+- Redshift cluster architecture
+  - Leader node
+    - SQL 엔드포인트
+    - 메타데이터 저장
+    - ML 최적화
+  - Compute nodes
+    - 로컬, 컬럼형 스토리지
+    - 쿼리를 병렬로 실행
+  - Amazon Redshift Spectrum nodes
+    - 데이터 레이크에 대해 직접 쿼리 실행
+- Data Modeling
+  - STAR 등 다양한 데이터 모델과 함께 사용 가능
+- Data load & unload
+  - 일부 Redshift 데이터 로드 작업은 여러 트랜잭션을 사용하고, 다른 작업은 단일 트랜잭션을 사용함
+  - 매번 리더 노드를 통과하며, 별도 트랜잭션이 필요한 데이터 로딩 : INSERT, UPDATE, DELETE
+  - 리더 노드를 한 번만 참여시키고 컴퓨팅 노드를 병렬로 참여시키는 데이터 로딩 : COPY, UNLOAD, CREATE TABLE, INSERT INTO
+  - 데이터 Load 시
+    - 가능할 때마다 COPY 를 사용하여 데이터 로드
+    - 테이브 당 단일 COPY 명령 사용
+    - COPY 가 불가능할 경우 다중 행 insert 사용
+    - 스테이징 테이블을 사용하여 upsert
+- Redshift Spectrum 
+  - Amazon S3에 저장된 외부 데이터에 대한 SQL 쿼리를 허용  
+
+### 실습
