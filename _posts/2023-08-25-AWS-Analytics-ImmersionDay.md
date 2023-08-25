@@ -51,7 +51,7 @@ AWS Analytics IMD - Intro
 ### AWS Analytics 소개
 - Data Lake : 간단히 말하면, 'S3에 데이터를 그냥 넣어놓자. 그리고 카탈로그를 잘 하면 되지 않을까?' 하는 개념 -> S3 + Glue 로 Database 처럼 사용할 수 있으며, 서버리스 쿼리 서비스인 Athena 를 함께 사용한다.  
 - AWS Glue Data Catalog Crawlers : 자동으로 데이터 카탈로그를 구축, 동기화 상태를 유지  
-- Real Time Analysis : Amazon Redshift 와 Amazon Aurora 제로 ETL 통합, S3에서 RedShift 로 자동화된 파일 수집 (테스트 중)  
+- Real Time Analysis : Amazon Redshift 와 Amazon Aurora 제로 ETL 통합, S3에서 RedShift 로 자동화된 파일 수집 (현재 개발 진행 중인 서비스)  
   
 ## Lab#1  
 환경구성 확인 및 실습
