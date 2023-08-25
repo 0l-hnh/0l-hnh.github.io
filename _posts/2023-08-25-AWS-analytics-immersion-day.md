@@ -53,7 +53,7 @@ AWS Analytics IMD - Intro
 - AWS Glue Data Catalog Crawlers : 자동으로 데이터 카탈로그를 구축, 동기화 상태를 유지  
 - Real Time Analysis : Amazon Redshift 와 Amazon Aurora 제로 ETL 통합, S3에서 RedShift 로 자동화된 파일 수집 (현재 개발 진행 중인 서비스)  
   
-## Lab#1  
+## Lab#1 : AWS Glue, Amazon Athena    
 환경구성 확인 및 실습
 
 ![전체 Workshop scenario](https://i.postimg.cc/9QSRvq8G/image.png)  
@@ -70,8 +70,7 @@ AWS Analytics IMD - Intro
 
 개인적으로 해보고 싶다면 GUID 를 생성해서 self-paced lab을 진행 가능.  
 
-### AWS Glue, Amazon Athena  
-#### Glue  
+### Glue  
 한 줄 요약 : 전처리 (ETL)
 - 기존 ETL 과 비교
   - 전통적인 ETL 은 확장성이 제한되어 있고, 라이선스 비용이 높고, 특정 솔루션에 종속됨
@@ -100,11 +99,11 @@ AWS Analytics IMD - Intro
 - Data Management
   - 수용성이 좋고, 크롤러를 사용하면 카탈로그를 볼 수 있고, 민감한 데이터를 식별 및 마스킹 가능  
 
-#### Athena  
+### Athena  
 한 줄 요약 : 쿼리 엔진  
 - SQL 또는 Python 을 사용해서 데이터를 쿼리
 
-#### 실습
+### 실습
 준비된 raw data 를 S3에 Load 하는 것부터 시작  
 1. Key Management Service (KMS)에 Key users 추가
 2. Lambda 로 S3 에 raw data 추가 
@@ -112,11 +111,11 @@ AWS Analytics IMD - Intro
 4. Athena 쿼리 날리고, 테이블 생성 확인
 5. Athena Query Editor 에서 바로 쿼리 할 수 있음  
 
-## Lab#2
-### AWS Glue DataBrew 
-요약 : '노코드'로 시각적 인터페이스를 제공하여, ETL 작업을 정의하고 쉽게 할 수 있도록 돕는 서비스  
+## Lab#2 : AWS Glue DataBrew 
+### 요약
+'노코드'로 시각적 인터페이스를 제공하여, ETL 작업을 정의하고 쉽게 할 수 있도록 돕는 서비스  
 
-#### AWS Glue DataBrew 
+### AWS Glue DataBrew 
 - Usage Flow
   1. 데이터 세트 정의
   2. 프로젝트를 만들고 레시피 (데이터 변환 단계) 정의
@@ -127,7 +126,7 @@ AWS Analytics IMD - Intro
 - AWS 계정당 동시 JOB, 데이터 세트 등에 기본 할당량 값이 있으나 soft limit 이기 때문에 조절 가능  
 - 과금은 사용 세션과 DataBrewJOB 을 합산하여 계산  
 
-#### 실습
+### 실습
 
 ![Project 생성 예시 이미지](https://i.postimg.cc/QtLTyDRb/image.png)  
 
@@ -176,3 +175,10 @@ AWS Analytics IMD - Intro
       timestamp_day,
       timestamp_hour
   ```  
+
+## Lab#3 : QuickSight
+### 요약
+클라우드 네이티브 서버리스 BI 서비스로, 사용량 기반 요금제 및 ML 인사이트로 고급 분석 수행 (쉽게 생각해서, 엑셀 피봇 차트 작성과 유사)  
+
+### Amazon Quicksight
+- 사용 사례 : 대시보드 제공, Insight 내장, 기업 보고서 작성
