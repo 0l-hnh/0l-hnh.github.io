@@ -29,11 +29,11 @@ AWS Analytics IMD - Intro
 
 ### Q&A About Analytics  
 - Why Analytics?
-  - Q1. 왜 DB만으로는 안 되고 Analytics 를 사용해야 하는지, 예를 들어 PS 고객 중에는 사용자 activity log 를 아직도 rdb에 구축하는 경우가 있음. 근본적으로 data warehouse 를 구축하면 더 할 수 있는 것이 무엇인지.  
+  - Q1. 왜 DB만으로는 안 되고 Analytics 를 사용해야 하는지? 예를 들어 PS 고객 중에는 사용자 activity log 를 아직도 rdb에 구축하는 경우가 있음. 근본적으로 data warehouse 를 구축하면 더 할 수 있는 것이 무엇인지?  
   - A1. Database 는 single node system 이고, Analytics 는 muliple nodes 로 병렬 처리가 가능하다. 그리고 database 는 row storage 형식을 취하지만, analytics database 는 column-storage format 이기 때문에, DB 엔진이 처음부터 끝까지 읽어서 처리할 필요가 없다. 그리고, Analytics 라고 하면 복잡한 시스템을 구축해야 할 것 같지만 AWS 에서는 서버-리스 서비스를 지원해서 소규모로 시작할 수 있는 것이 강점이다.  
 
 - How to Start?
-  - Q2. 뭐 부터 시작해야 하는지, 어떤 데이터를 어떻게 수집해야 하는지.  
+  - Q2. 뭐 부터 시작해야 하는지? 그리고 어떤 데이터를 어떻게 수집해야 하는지?  
   - A2. 모든 데이터를 다 웨어하우스에 옮기는 것 대신, 가장 비즈니스의 kpi 를 예측 (measure) 하기 위해 사용하고 싶은 데이터를 정리하고 working backwards 하는 것을 추천한다. 그리고 data-driven-everything 이라고 부르는 B2E 프로그램을 사용해봐도 좋다.   
 
 - Global CSP compet
@@ -193,6 +193,14 @@ AWS Analytics IMD - Intro
   - Q : ML 기반 NLQ로 셀프 서비스 분석 (질문에 자동으로 답변하는 table 생성)
 - Enterprise Reporting
   - PDF 생성 시 페이지 넘어갈 때 표가 잘리지 않고 테이블이 예쁘게 나온다고 함
-  - 그 외 예약 전송, 스냅샷 기록 등
+  - 그 외 예약 전송, 스냅샷 기록 등 제공  
 
 ### 실습
+- Quicksight
+  1. 가입
+  2. KMS 키 등록
+  3. 데이터 셋 생성
+  4. 그래프 생성 및 편집  
+
+![Quicksight 이미지 예제](https://postimg.cc/qhxSPCVS)  
+
