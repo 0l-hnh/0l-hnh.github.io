@@ -22,7 +22,7 @@ sitemap:
 ---
 
 ## 개요  
-AWS Analytics Immersion Day 를 듣기 위해 역삼에 왔다.
+2023년 8월 25일 AWS Analytics Immersion Day 에 참석하였다.
 
 ## Intro  
 AWS Analytics IMD - Intro  
@@ -234,4 +234,13 @@ AWS Analytics IMD - Intro
 - Redshift Spectrum 
   - Amazon S3에 저장된 외부 데이터에 대한 SQL 쿼리를 허용  
 
+그 외 : row-oriented 와 column-oriented 형의 차이
+row 형은 OLTP 일 때 무조건 사용해야 하지만, 그 외의 경우 column 으로 저장할 때 빠르게 index 참조를 할 수 있음
+
 ### 실습
+  1. Redshift 를 생성
+  2. S3에서 데이터를 읽어와서 테이블을 생성 (저장 공간이 다른 두 개의 table 을 Redshift 에서 Join 할 수 있음) 
+  3. LMS 시각화 등이 가능  
+
+## 감상
+데이터 저장, 분석을 위한 다양한 서비스를 체험해 볼 수 있어서 유익했다.
