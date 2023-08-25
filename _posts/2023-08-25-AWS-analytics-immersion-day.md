@@ -202,5 +202,4 @@ AWS Analytics IMD - Intro
   3. 데이터 셋 생성
   4. 그래프 생성 및 편집  
 
-![Quicksight 이미지 예제](https://postimg.cc/qhxSPCVS)  
-
+![DashBoard Example](https://i.postimg.cc/nc7Wz8bQ/image.png)  
