@@ -128,11 +128,53 @@ AWS Analytics IMD - Intro
 - 과금은 사용 세션과 DataBrewJOB 을 합산하여 계산  
 
 #### 실습
+
+![Project 생성 예시 이미지](https://i.postimg.cc/QtLTyDRb/image.png)  
+
 - Profile raw SIS datasets
   1. 데이터 셋을 생성
   2. Profile Job 생성
   3. Profile Job 실행  
 - Combine raw SIS datasets
   1. 데이터 셋을 생성
-  2. 레시피를 생성
+  2. 레시피를 생성 (실습 시에는 Join, Rename 두 가지를 사용)
+  3. 레시피를 Publish
+  4. Recipe Job 을 생성하고, 실행  
 
+이렇게 데이터를 추출하고 전처리하는 동작을 설계할 수 있음.
+
+- Curating the student data lake using SQL
+  1. LMS 데이터 셋을 생성
+  2. Athena 쿼리 창에서 쿼리 날리기
+  3. S3 에 데이터가 저장된 것을 확인 
+
+- 쿼리문 예시
+
+```java
+CREATE TABLE 
+    "db_cur_lmsdemo"."agg_pageview_count_by_user_course"
+WITH (
+  external_location = 's3://dataedu-curated-_guid_/lmsdemo/agg_pageview_count_by_user_course/',
+  format = 'PARQUET',
+  parquet_compression = 'SNAPPY'
+)
+AS
+SELECT 
+    user_id,
+    course_id,
+    timestamp_year,
+    timestamp_month,
+    timestamp_day,
+    timestamp_hour,
+    count(id) AS pageview_count
+FROM 
+    "db_raw_lmsdemo"."requests"
+GROUP BY 
+    user_id,
+    course_id,
+    timestamp_year,
+    timestamp_month,
+    timestamp_day,
+    timestamp_hour
+
+```  
