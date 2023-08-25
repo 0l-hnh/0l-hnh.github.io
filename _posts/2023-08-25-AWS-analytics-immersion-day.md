@@ -141,7 +141,8 @@ AWS Analytics IMD - Intro
   3. 레시피를 Publish
   4. Recipe Job 을 생성하고, 실행  
 
-이렇게 데이터를 추출하고 전처리하는 동작을 설계할 수 있음.
+이렇게 데이터를 추출하고 전처리하는 동작을 설계할 수 있음.  
+S3 storage 에 저장하는 방법으로는 parquet, snappy 압축을 사용하기를 권장하고 있음  
 
 - Curating the student data lake using SQL
   1. LMS 데이터 셋을 생성
