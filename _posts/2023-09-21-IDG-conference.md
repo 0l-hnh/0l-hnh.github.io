@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "[DevLog] Future of AI & Data 2023 참석"
-date:   2023-09-21 9:10:00 +0900
+date:   2040-09-21 9:10:00 +0900
 
 categories:
   - devlog
