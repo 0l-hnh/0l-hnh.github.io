@@ -104,7 +104,7 @@ sitemap:
 - 논리적 데이터 전략의 실현 및 그 효과  
   - Denodo 가 어떤 방식으로 솔루션을 설계했는지 소개함  
   - 키워드 : '가상화 된 데이터', '거버넌스', '데이터 통합'  
-  - 분석 대상 데이터에 대한 지식을 축적하고, 협업함  \
+  - 분석 대상 데이터에 대한 지식을 축적하고, 협업함  
   - Denodo 의 환경을 사용하여서 업무 효율을 개선시켜 보자... 
 
 ## Expert Advice : HR 사례로 처음 시작하는 '엔터프라이즈를 위한 생성형 AI 프로젝트'  
@@ -112,6 +112,8 @@ sitemap:
 주제 : 생성형 AI, 공기 같은 존재가 되어간다  
 
 > "내가 그의 이름을 불러 주었을 때, 그는 나에게로 와서 꽃이 되었다." 김춘서 - 꽃 (中)  
+
+LLM을 'HR Chatbot' 으로 만들기까지  
 
 - AI 에 어떤 '페르소나'를 부여할 건지?  
   - 예를 들어, 닭을 세도록 학습한 AI 는 닭만 세고, 소를 세도록 학습한 AI는 소만 센다.  
@@ -139,4 +141,51 @@ sitemap:
       - AWS 등에서 재공하는 SaaS-based apps
     - Enabling Tools
 - 사례 : 메가존클라우드 Pilot 프로젝트  
-  - 
+  - 개요
+    - HR 을 대상으로 9주 정도 진행한 프로젝트  
+    - HR 시 반복되는 질의가 많고, 일정 시즌에 문의가 집중됨  
+  - 목표
+    - 'Megaone Ask' 라는 플랫폼을 활용해서 반복되는 질의 응답을 줄이기 위함을 목표로 설정  
+  - 범위  
+    - 한글 LLM 선정  
+    - 규정집을 사용하여 한글 LLM 을 Fine-Tuning 
+    - 한글 LLM, LangChain, KB 를 AWS 환경에서 연계하여 검증  
+    - HR Chatbot 시나리오 검증  
+  - 프로세스  
+    - 시나리오 작성 (e.g. 교통비 한도 문의)  
+      1. 질문 인입, 모델 활성화  
+      2. 연관 정보 검색  
+      3. RAG (Knowlege Base, AWS Kendra) 검색  
+      4. 연관 정보 추출  
+      5. 질문과 연관 정보 결합  
+      6. API Layer Endpoint For Prompts/Text Embedding  
+      7. 결론  
+    - 데이터 준비  
+      - 문답 정리, 문서 Chunking  
+      - 데이터 전처리 (개인정보 제거, 감사 인사 등 매크로 데이터 제거)  
+    - 아키텍처  
+      - AWS Kendra 사용  
+      - Input 을 Amazon SageMaker Endpoint-LLM 으로 넘김  
+    - 사용 모델  
+      - KULLM 사용 (12.8b 기준 파라미터 수 : 약 12.8억 & 모델 크기 : 약 26 GB)
+    - RAG (Retrieval Augmented Generation)   
+    - Fine-Tuning  
+    - Prompt Engineering  
+      - 목적에 대한 정답 or 답변 정확도 향상  
+      - e.g. 중복 답변을 하지 않도록 하는 방향으로 학습  
+    - Chatbot Persona  
+      - e.g. 최초 프롬프츠에서 "반드시 문서 내에서 답을 찾아 답변한다" 등의 지침을 줌
+  - 한계  
+    - 생성형 언어 모델의 태생적 한계로 인해, 한글에서 답변 제어가 쉽지 않음 → 별도 처리가 필요함  
+  - 확장 및 production 전략  
+    - LLM 모델 다양화  
+    - RAG 전략 세분화  
+    - Chatbot 프로세스 개선  
+    - LLMops 표준화  
+- 결론 : 메가존클라우드에서 GenAI360 오퍼링을 지원함  
+
+## Expert Advice : 대규모 AI 기반 데이터 플랫폼 구축 전략  
+연사 : 현지수 (이사, VMware)  
+주제 : 생성형 AI 를 데이터 플랫폼에 적용하기 위한 전략   
+
+- 생ㅅ
