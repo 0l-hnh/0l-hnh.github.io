@@ -62,3 +62,13 @@ sitemap:
 연사 : 임광수 (상무, ServiceNow)
 - 주제 : DX 시 AI 가 어떤 가치를 창출할 수 있을지?  
 
+- AI 에 숨어 있는 잠재성
+  - 데이터 마이닝, ML, AI Ops 등이 모두 단일 지능형 플랫폼에 내재되어 있다면...  
+  - 예시 : 대화형 지능을 통해 반복 업무를 제외하고, End-user 에게 개선된 경험을 제공  
+  
+- Service now 에서 생성형 AI 를 어떻게 활용하고 있는지   
+  - Generative AI + Now Platform  
+    - 경험 혁신 : end-user 에게 빠른 답변 제공, self-service 향상  
+    - 생산성 가속화 : 조직원의 업무 자동화  
+    - 민첩성 향상 : 빠른 기술 도입  
+  - 
