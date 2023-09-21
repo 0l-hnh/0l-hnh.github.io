@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "[DevLog] Future of AI & Data 2023 참석"
-date:   2040-09-21 9:10:00 +0900
+date:   2023-09-21 10:10:00 +0900
 
 categories:
   - devlog
@@ -200,7 +200,7 @@ LLM을 'HR Chatbot' 으로 만들기까지
     - 지식 단절 : Big Tech 기업이 배포하는 pretrained LLM 의 제한 문제  
     - 환각 : e.g. 법원에서 가짜 사건을 인용하여 망신을 산 사례  
     - 용도 : 전문성이 떨어지는 이슈 있을 수 있음  
-  - Private Infra 환경을 구축하는 것을 추천  
+  - 따라서, Private Infra 환경을 구축하는 것을 추천  
 - 생성형 AI를 기업이 도입하고자 할 때를, 데이터 플랫폼 관점에서  
   - AI 모델에서 데이터는 매우 중요  
   - 데이터 처리 속도가 중요함  
@@ -212,3 +212,13 @@ LLM을 'HR Chatbot' 으로 만들기까지
     2. Retrieval 단계에서, 의미 기반 검색을 하고 검색 결과를 반환함 
     3. Generation 단계에서, 질문 + 프롬프츠 + 검색 결과를 LLM 에 입력하여 정답을 생성
     4. 생성된 답변을 출력  
+- AI Platform Blueprint  
+  - 운영, 데이터 레이크, 시스템 로그
+  - ETL 을 통해 Data Platform 으로 전달
+  - Private AI 사용 
+  - 이 때, RAG 기법을 활용하기 위해 vector 연산 기능도 필요함  
+- 결론 대규모 AI 기반 데이터 플랫폼 구축 전략  
+  - AI 플랫폼 중심의 거시적 관점에서 데이터 고려  
+  - 데이터 처리 및 연계 성능, 벡터 연산, 고급 분석 고려
+  - 성공적인 AI 서비스를 위한 전담 조직 역량 강화  
+
